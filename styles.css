@@ -1,8 +1,93 @@
-/*
+.main-container {
+  display: flex;
+  flex-direction: column-reverse;
+}
 
-This CSS file will be included with your plugin, and
-available in the app when your plugin is enabled.
+.chat {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
 
-If your plugin does not need CSS, delete this file.
+.chat__interaction-container {
+  display: flex;
+  flex-direction: row;
+  position: fixed;
+  bottom: 32px;
+  left: 16px;
+  right: 28px;
 
-*/
+  align-items: stretch;
+  justify-content: center;
+  gap: 4px;
+}
+
+.chat__input {
+  width: 100%;
+}
+
+.chat__clear-button {
+  height: 28px;
+  width: 28px;
+
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxZW0iIGhlaWdodD0iMWVtIiB2aWV3Qm94PSIwIDAgMzIgMzIiPjxwYXRoIGZpbGw9ImN1cnJlbnRDb2xvciIgZD0iTTI2IDIwaC02di0yaDZ6bTQgOGgtNnYtMmg2em0tMi00aC02di0yaDZ6Ii8+PHBhdGggZmlsbD0iY3VycmVudENvbG9yIiBkPSJNMTcuMDAzIDIwYTQuODk1IDQuODk1IDAgMCAwLTIuNDA0LTQuMTczTDIyIDNsLTEuNzMtMWwtNy41NzcgMTMuMTI2YTUuNjk5IDUuNjk5IDAgMCAwLTUuMjQzIDEuNTAzQzMuNzA2IDIwLjI0IDMuOTk2IDI4LjY4MiA0LjAxIDI5LjA0YTEgMSAwIDAgMCAxIC45NmgxNC45OTFhMSAxIDAgMCAwIC42LTEuOGMtMy41NC0yLjY1Ni0zLjU5OC04LjE0Ni0zLjU5OC04LjJabS01LjA3My0zLjAwM0EzLjExIDMuMTEgMCAwIDEgMTUuMDA0IDIwYzAgLjAzOC4wMDIuMjA4LjAxNy40NjlsLTUuOS0yLjYyNGEzLjggMy44IDAgMCAxIDIuODA5LS44NDhaTTE1LjQ1IDI4QTUuMiA1LjIgMCAwIDEgMTQgMjVoLTJhNi41IDYuNSAwIDAgMCAuOTY4IDNoLTIuMjIzQTE2LjYxNyAxNi42MTcgMCAwIDEgMTAgMjRIOGExNy4zNDIgMTcuMzQyIDAgMCAwIC42NjUgNEg2Yy4wMzEtMS44MzYuMjktNS44OTIgMS44MDMtOC41NTNsNy41MzMgMy4zNUExMy4wMjUgMTMuMDI1IDAgMCAwIDE3LjU5NiAyOFoiLz48L3N2Zz4=");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.chat__send-button {
+  height: 28px;
+  width: 28px;
+
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxZW0iIGhlaWdodD0iMWVtIiB2aWV3Qm94PSIwIDAgMzIgMzIiPjxwYXRoIGZpbGw9ImN1cnJlbnRDb2xvciIgZD0ibTI3LjQ1IDE1LjExbC0yMi0xMWExIDEgMCAwIDAtMS4wOC4xMmExIDEgMCAwIDAtLjMzIDFMNyAxNkw0IDI2Ljc0QTEgMSAwIDAgMCA1IDI4YTEgMSAwIDAgMCAuNDUtLjExbDIyLTExYTEgMSAwIDAgMCAwLTEuNzhabS0yMC45IDEwTDguNzYgMTdIMTh2LTJIOC43Nkw2LjU1IDYuODlMMjQuNzYgMTZaIi8+PC9zdmc+");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.chat__mentor {
+  display: flex;
+  direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.chat__messages {
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  height: auto;
+  padding-bottom: 42px;
+}
+
+.chat__message {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--color-base-50);
+}
+
+.chat__message--assistant {
+  align-self: flex-start;
+  width: auto;
+}
+
+.chat__message--user {
+  align-self: flex-end;
+  width: auto;
+  background-color: hsla(
+    var(--accent-h),
+    var(--accent-s),
+    var(--accent-l),
+    0.1
+  );
+}
+
+.chat__thinking {
+  position: absolute;
+  bottom: 40px;
+  left: 16px;
+  right: 28px;
+}
