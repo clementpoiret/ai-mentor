@@ -84,10 +84,34 @@ export class ChatView extends ItemView {
 		const displayedMessages = [firstMessage, ...this.history]
 
 		for (const message of displayedMessages) {
-			const messageEl = chatDiv.createEl("p", { text: message.content })
+			// Contains text and icon.
+			const messageDiv = chatDiv.createDiv()
+			messageDiv.addClass("chat__message-container")
+			messageDiv.addClass(`chat__message-container--${message.role}`)
 
+			// Add the message text.
+			const messageEl = messageDiv.createEl("p", {
+				text: message.content,
+			})
 			messageEl.addClass("chat__message")
 			messageEl.addClass(`chat__message--${message.role}`)
+
+			// Add an icon button to next to the message to copy it.
+			// Defaults to hidden.
+			const actionButton = messageDiv.createEl("button")
+			actionButton.addClass("chat__action-button")
+			actionButton.onclick = () => {
+				navigator.clipboard.writeText(message.content)
+				new Notice("Copied to clipboard.")
+			}
+
+			// When the user hovers over the message, show the copy button.
+			messageDiv.onmouseenter = () => {
+				actionButton.addClass("chat__action-button--visible")
+			}
+			messageDiv.onmouseleave = () => {
+				actionButton.removeClass("chat__action-button--visible")
+			}
 		}
 
 		// Add a text input.
