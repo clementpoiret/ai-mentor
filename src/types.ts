@@ -1,5 +1,4 @@
 export type Mentor = {
-	id: string
 	name: string
 	systemPrompt: string
 	firstMessage: string

@@ -6,6 +6,8 @@ import {
 	TextComponent,
 } from "obsidian"
 import ObsidianMentor from "./main"
+import { Topics, Individuals } from "./mentors"
+import { Mentor } from "./types"
 
 export default class SettingTab extends PluginSettingTab {
 	plugin: ObsidianMentor
@@ -21,6 +23,28 @@ export default class SettingTab extends PluginSettingTab {
 		containerEl.empty()
 
 		containerEl.createEl("h2", { text: "Settings for your mentor" })
+
+		const mentorList: Record<string, Mentor> = {
+			...Topics,
+			...Individuals,
+		}
+		const mentorIds = mentorList ? Object.keys(mentorList) : []
+
+		new Setting(containerEl)
+			.setName("Preferred Mentor")
+			.setDesc("The mentor you'd like to talk to in priority.")
+			.addDropdown((dropdown) => {
+				mentorIds.forEach((id) => {
+					dropdown.addOption(id, mentorList[id].name)
+				})
+				dropdown.setValue(
+					this.plugin.settings.preferredMentorId || "default"
+				)
+				dropdown.onChange((value) => {
+					this.plugin.settings.preferredMentorId = value
+					this.plugin.saveSettings()
+				})
+			})
 
 		new Setting(containerEl)
 			.setName("OpenAI API Key")

@@ -1,15 +1,18 @@
-import { Plugin } from "obsidian"
+import { addIcon, Plugin } from "obsidian"
+import { MentorIcon } from "./assets/icons/mentor"
 import { ChatView, VIEW_TYPE_CHAT } from "./chatview"
 import SettingTab from "./settings"
 
 // Remember to rename these classes and interfaces!
 
 interface MentorSettings {
+	preferredMentorId: string
 	language: string
 	token: string
 }
 
 const DEFAULT_SETTINGS: MentorSettings = {
+	preferredMentorId: "default",
 	language: "en",
 	token: "",
 }
@@ -22,12 +25,19 @@ export default class ObsidianMentor extends Plugin {
 
 		this.registerView(
 			VIEW_TYPE_CHAT,
-			(leaf) => new ChatView(leaf, this.settings.token)
+			(leaf) =>
+				new ChatView(
+					leaf,
+					this.settings.token,
+					this.settings.preferredMentorId
+				)
 		)
 
 		// This creates an icon in the left ribbon.
+		addIcon("aimentor", MentorIcon)
+
 		const ribbonIconEl = this.addRibbonIcon(
-			"user",
+			"aimentor",
 			"Mentor",
 			(evt: MouseEvent) => {
 				// Called when the user clicks the icon.

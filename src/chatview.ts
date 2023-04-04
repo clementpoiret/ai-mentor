@@ -2,18 +2,28 @@ import { ItemView, Notice, WorkspaceLeaf } from "obsidian"
 import { Individuals, Topics } from "./mentors"
 import { getGPTCompletion, GPTSettings, ModelType } from "./model"
 import { Mentor, Message } from "./types"
+import { CopyIcon } from "./assets/icons/copy"
+import { SendIcon } from "./assets/icons/send"
+import { CleanIcon } from "./assets/icons/clean"
 
 export const VIEW_TYPE_CHAT = "mentor-chat-view"
 
 export class ChatView extends ItemView {
 	apiKey: string
+	preferredMentorId: string
 
-	constructor(leaf: WorkspaceLeaf, token: string) {
+	constructor(leaf: WorkspaceLeaf, token: string, preferredMentorId: string) {
 		super(leaf)
 		this.apiKey = token
+		this.preferredMentorId = preferredMentorId
 	}
 
-	selectedMentor: Mentor = Individuals[0]
+	// Merge the two Record<string, Mentor> objects into one.
+	mentorList: Record<string, Mentor> = {
+		...Topics,
+		...Individuals,
+	}
+	selectedMentorId = "default"
 
 	currentInput = ""
 	history: Message[] = []
@@ -28,7 +38,7 @@ export class ChatView extends ItemView {
 	}
 
 	getIcon(): string {
-		return "user"
+		return "aimentor"
 	}
 
 	async onOpen() {
@@ -42,6 +52,8 @@ export class ChatView extends ItemView {
 		container.createEl("h4", { text: "Your AI Mentor" })
 
 		// Mentor selection.
+		const selectedMentor = this.mentorList[this.selectedMentorId]
+
 		const mentorDiv = container.createDiv()
 		mentorDiv.addClass("chat__mentor")
 
@@ -57,20 +69,27 @@ export class ChatView extends ItemView {
 		const individualsGroup = selectEl.createEl("optgroup")
 		individualsGroup.label = "Famous Individuals"
 
-		for (const mentor of Topics) {
+		for (const mentor of Object.entries(Topics)) {
 			const optionEl = topicsGroup.createEl("option")
-			optionEl.value = mentor.id
-			optionEl.text = mentor.name
+			optionEl.value = mentor[0]
+			optionEl.text = mentor[1].name
 		}
-		for (const mentor of Individuals) {
+
+		for (const mentor of Object.entries(Individuals)) {
 			const optionEl = individualsGroup.createEl("option")
-			optionEl.value = mentor.id
-			optionEl.text = mentor.name
+			optionEl.value = mentor[0]
+			optionEl.text = mentor[1].name
 		}
+
 		selectEl.onchange = (evt) => {
 			this.handleMentorChange((evt.target as HTMLSelectElement).value)
 		}
-		selectEl.value = this.selectedMentor.id
+		selectEl.value = this.selectedMentorId
+
+		// log all values of selectEl
+		for (let i = 0; i < selectEl.length; i++) {
+			console.log("selectEl", selectEl.options[i].value)
+		}
 
 		// Display messages in the chat.
 		const chatDiv = container.createDiv()
@@ -79,7 +98,7 @@ export class ChatView extends ItemView {
 		// Add history to selectedMentor.firstMessage
 		const firstMessage: Message = {
 			role: "assistant",
-			content: this.selectedMentor.firstMessage,
+			content: selectedMentor.firstMessage,
 		}
 		const displayedMessages = [firstMessage, ...this.history]
 
@@ -99,7 +118,11 @@ export class ChatView extends ItemView {
 			// Add an icon button to next to the message to copy it.
 			// Defaults to hidden.
 			const actionButton = messageDiv.createEl("button")
-			actionButton.addClass("chat__action-button")
+			actionButton.addClass("icon-button")
+			actionButton.addClass("clickable-icon")
+			actionButton.addClass("icon-button--hidden")
+			actionButton.innerHTML = CopyIcon
+
 			actionButton.onclick = () => {
 				navigator.clipboard.writeText(message.content)
 				new Notice("Copied to clipboard.")
@@ -107,10 +130,10 @@ export class ChatView extends ItemView {
 
 			// When the user hovers over the message, show the copy button.
 			messageDiv.onmouseenter = () => {
-				actionButton.addClass("chat__action-button--visible")
+				actionButton.removeClass("icon-button--hidden")
 			}
 			messageDiv.onmouseleave = () => {
-				actionButton.removeClass("chat__action-button--visible")
+				actionButton.addClass("icon-button--hidden")
 			}
 		}
 
@@ -133,12 +156,16 @@ export class ChatView extends ItemView {
 
 		// Add a send button.
 		const sendButton = interationDiv.createEl("button")
-		sendButton.addClass("chat__send-button")
+		sendButton.addClass("icon-button")
+		sendButton.addClass("clickable-icon")
+		sendButton.innerHTML = SendIcon
 		sendButton.onclick = () => this.handleSend()
 
 		// Add a button to clear the chat.
 		const clearButton = interationDiv.createEl("button")
-		clearButton.addClass("chat__clear-button")
+		clearButton.addClass("icon-button")
+		clearButton.addClass("clickable-icon")
+		clearButton.innerHTML = CleanIcon
 		clearButton.onclick = () => this.handleClear()
 	}
 
@@ -148,9 +175,7 @@ export class ChatView extends ItemView {
 
 	async handleMentorChange(id: string) {
 		// Update the selected mentor.
-		const mentors = [...Topics, ...Individuals]
-		this.selectedMentor =
-			mentors.find((mentor) => mentor.id === id) || mentors[0]
+		this.selectedMentorId = id
 
 		// Clear the chat.
 		this.history = []
@@ -206,7 +231,7 @@ export class ChatView extends ItemView {
 		const systemMessage: Message = {
 			role: "system",
 			content:
-				this.selectedMentor.systemPrompt ||
+				this.mentorList[this.selectedMentorId].systemPrompt ||
 				"You are ChatGPT, a large language model trained by OpenAI. Answer as concisely as possible.",
 		}
 		const input = [
