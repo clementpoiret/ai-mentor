@@ -1,6 +1,9 @@
-import { addIcon, Plugin } from "obsidian"
+import { addIcon, Menu, Notice, Plugin } from "obsidian"
+
 import { MentorIcon } from "./assets/icons/mentor"
 import { ChatView, VIEW_TYPE_CHAT } from "./chatview"
+import { explain } from "./commands"
+import { MentorModal } from "./modals"
 import SettingTab from "./settings"
 
 // Remember to rename these classes and interfaces!
@@ -49,6 +52,94 @@ export default class ObsidianMentor extends Plugin {
 
 		// This adds a settings tab so the user can configure various aspects of the plugin
 		this.addSettingTab(new SettingTab(this.app, this))
+
+		// This adds a command that can be triggered with a hotkey.
+		this.addCommand({
+			id: "open-mentor",
+			name: "Open Mentor",
+			callback: () => {
+				this.activateView()
+			},
+		})
+
+		// This adds the "ELI5" command.
+		this.addCommand({
+			id: "eli5",
+			name: "ELI5",
+			editorCallback: async (editor) => {
+				const title = "Explain Like I'm 5"
+				const selection = editor.getSelection()
+				const loadingModal = new MentorModal(
+					this.app,
+					title,
+					"Interesting, let me think..."
+				)
+
+				if (selection) {
+					loadingModal.open()
+
+					explain(selection, this.settings.token).then((response) => {
+						// editor.replaceSelection(response)
+						if (response) {
+							// Show the explanation
+							loadingModal.close()
+							new MentorModal(this.app, title, response).open()
+						} else {
+							// Show an error
+							new Notice("Error: Could not get explanation.")
+						}
+					})
+				} else {
+					new Notice("Error: No text selected.")
+				}
+			},
+		})
+
+		// Also add ELI5 to the right-click context menu
+		// todo: clean to avoid code duplication
+		this.registerEvent(
+			this.app.workspace.on("editor-menu", (menu: Menu, editor, view) => {
+				menu.addItem((item) => {
+					item.setTitle("Explain Like I'm 5")
+					item.setIcon("aimentor")
+					item.onClick(() => {
+						const title = "Explain Like I'm 5"
+						const selection = editor.getSelection()
+						const loadingModal = new MentorModal(
+							this.app,
+							title,
+							"Interesting, let me think..."
+						)
+
+						if (selection) {
+							loadingModal.open()
+
+							explain(selection, this.settings.token).then(
+								(response) => {
+									// editor.replaceSelection(response)
+									if (response) {
+										// Show the explanation
+										loadingModal.close()
+										new MentorModal(
+											this.app,
+											title,
+											response
+										).open()
+									} else {
+										// Show an error
+										new Notice(
+											"Error: Could not get explanation."
+										)
+									}
+								}
+							)
+						} else {
+							new Notice("Error: No text selected.")
+						}
+					})
+				})
+			})
+		)
 	}
 
 	async activateView() {

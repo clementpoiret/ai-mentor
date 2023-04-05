@@ -1,17 +1,18 @@
 import { ItemView, Notice, WorkspaceLeaf } from "obsidian"
+
+import { CleanIcon } from "./assets/icons/clean"
+import { CopyIcon } from "./assets/icons/copy"
+import { SendIcon } from "./assets/icons/send"
 import { Individuals, Topics } from "./mentors"
 import { getGPTCompletion, GPTSettings, ModelType } from "./model"
 import { Mentor, Message } from "./types"
-import { CopyIcon } from "./assets/icons/copy"
-import { SendIcon } from "./assets/icons/send"
-import { CleanIcon } from "./assets/icons/clean"
 
 export const VIEW_TYPE_CHAT = "mentor-chat-view"
 
 // todo: verify icons and mouse events
 export class ChatView extends ItemView {
 	apiKey: string
-	preferredMentorId: string = "default"
+	preferredMentorId = "default"
 	firstOpen = true
 
 	constructor(leaf: WorkspaceLeaf, token: string, preferredMentorId: string) {
@@ -49,7 +50,7 @@ export class ChatView extends ItemView {
 			this.firstOpen = false
 			this.handleMentorChange(this.preferredMentorId)
 		}
-		
+
 		const chatView = this.containerEl.children[1]
 		chatView.empty()
 		chatView.addClass("main-container")

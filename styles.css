@@ -127,3 +127,17 @@
   left: 16px;
   right: 28px;
 }
+
+.modal__title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.modal__text {
+  font-size: 1rem;
+  font-weight: 400;
+  margin-bottom: 1rem;
+
+  white-space: pre-wrap;
+}

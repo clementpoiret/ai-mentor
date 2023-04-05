@@ -5,6 +5,7 @@ import {
 	Setting,
 	TextComponent,
 } from "obsidian"
+
 import ObsidianMentor from "./main"
 import { Topics, Individuals } from "./mentors"
 import { Mentor } from "./types"
