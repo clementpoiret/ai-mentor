@@ -11,7 +11,8 @@ export const VIEW_TYPE_CHAT = "mentor-chat-view"
 // todo: verify icons and mouse events
 export class ChatView extends ItemView {
 	apiKey: string
-	preferredMentorId: string
+	preferredMentorId: string = "default"
+	firstOpen = true
 
 	constructor(leaf: WorkspaceLeaf, token: string, preferredMentorId: string) {
 		super(leaf)
@@ -24,7 +25,7 @@ export class ChatView extends ItemView {
 		...Topics,
 		...Individuals,
 	}
-	selectedMentorId = "default"
+	selectedMentorId = this.preferredMentorId
 
 	currentInput = ""
 	history: Message[] = []
@@ -43,6 +44,12 @@ export class ChatView extends ItemView {
 	}
 
 	async onOpen() {
+		// if this is the first time the view is opened, we need to load the choosen mentor from the settings
+		if (this.firstOpen) {
+			this.firstOpen = false
+			this.handleMentorChange(this.preferredMentorId)
+		}
+		
 		const chatView = this.containerEl.children[1]
 		chatView.empty()
 		chatView.addClass("main-container")
