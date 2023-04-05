@@ -3,6 +3,15 @@
   flex-direction: column-reverse;
 }
 
+.icon-button {
+  height: var(--input-height);
+  width: var(--input-height);
+}
+
+.icon-button--hidden {
+  display: none;
+}
+
 .chat {
   display: flex;
   flex-direction: column;
@@ -78,6 +87,9 @@
   margin-top: 10px;
   border-radius: 10px;
   border: 1px solid var(--color-base-50);
+
+  /* Display line returns and tabs */
+  white-space: pre-wrap;
 }
 
 .chat__action-button {

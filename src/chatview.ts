@@ -8,6 +8,7 @@ import { CleanIcon } from "./assets/icons/clean"
 
 export const VIEW_TYPE_CHAT = "mentor-chat-view"
 
+// todo: verify icons and mouse events
 export class ChatView extends ItemView {
 	apiKey: string
 	preferredMentorId: string
@@ -85,11 +86,6 @@ export class ChatView extends ItemView {
 			this.handleMentorChange((evt.target as HTMLSelectElement).value)
 		}
 		selectEl.value = this.selectedMentorId
-
-		// log all values of selectEl
-		for (let i = 0; i < selectEl.length; i++) {
-			console.log("selectEl", selectEl.options[i].value)
-		}
 
 		// Display messages in the chat.
 		const chatDiv = container.createDiv()

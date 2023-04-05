@@ -29,6 +29,7 @@ export const defaultSettings: GPTSettings = {
 	stop: [],
 }
 
+// todo: discard first messages if they are too long
 export const getGPTCompletion = async (
 	apiKey: string,
 	messages: Message[],
@@ -48,7 +49,6 @@ export const getGPTCompletion = async (
 		stop: settings.stop.length > 0 ? settings.stop : undefined,
 		suffix: suffix ? suffix : undefined,
 	}
-	console.log(body)
 	const requestUrlParam: RequestUrlParam = {
 		url: apiUrl,
 		method: "POST",
