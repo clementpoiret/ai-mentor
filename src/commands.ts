@@ -34,9 +34,6 @@ export const explain = async (text: string, apiKey: string) => {
 		stop: [],
 	}
 
-	console.log("prompt", prompt)
-	console.log("systemPrompt", systemPrompt)
-	console.log("mentor", mentor)
 	const explanation = await modelRequest(
 		prompt,
 		systemPrompt,
