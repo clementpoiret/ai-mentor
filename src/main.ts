@@ -6,8 +6,6 @@ import { explain } from "./commands"
 import { MentorModal } from "./modals"
 import SettingTab from "./settings"
 
-// Remember to rename these classes and interfaces!
-
 interface MentorSettings {
 	preferredMentorId: string
 	language: string
