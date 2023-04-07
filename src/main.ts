@@ -2,7 +2,7 @@ import { addIcon, Menu, Notice, Plugin } from "obsidian"
 
 import { MentorIcon } from "./assets/icons/mentor"
 import { ChatView, VIEW_TYPE_CHAT } from "./chatview"
-import { explain } from "./commands"
+import { explain, redact } from "./commands"
 import { MentorModal } from "./modals"
 import SettingTab from "./settings"
 
@@ -127,6 +127,83 @@ export default class ObsidianMentor extends Plugin {
 										// Show an error
 										new Notice(
 											"Error: Could not get explanation."
+										)
+									}
+								}
+							)
+						} else {
+							new Notice("Error: No text selected.")
+						}
+					})
+				})
+			})
+		)
+
+		// This adds the "redact" command.
+		this.addCommand({
+			id: "redact",
+			name: "Redact",
+			editorCallback: async (editor) => {
+				const title = "Redact"
+				const selection = editor.getSelection()
+				const loadingModal = new MentorModal(
+					this.app,
+					title,
+					"Let me read and redact your note..."
+				)
+
+				if (selection) {
+					loadingModal.open()
+
+					redact(selection, this.settings.token).then((response) => {
+						// editor.replaceSelection(response)
+						if (response) {
+							// append a new line to the end of the note
+							loadingModal.close()
+							const note = selection + "\n\n___\n\n" + response
+							editor.replaceSelection(note)
+						} else {
+							// Show an error
+							new Notice("Error: Could not redact your note.")
+						}
+					})
+				} else {
+					new Notice("Error: No text selected.")
+				}
+			},
+		})
+
+		// Also add redact to the right-click context menu
+		this.registerEvent(
+			this.app.workspace.on("editor-menu", (menu: Menu, editor, view) => {
+				menu.addItem((item) => {
+					item.setTitle("Redact")
+					item.setIcon("aimentor")
+					item.onClick(() => {
+						const title = "Redact"
+						const selection = editor.getSelection()
+						const loadingModal = new MentorModal(
+							this.app,
+							title,
+							"Let me read and redact your note..."
+						)
+
+						if (selection) {
+							loadingModal.open()
+
+							redact(selection, this.settings.token).then(
+								(response) => {
+									// editor.replaceSelection(response)
+									if (response) {
+										// append a new line to the end of the note
+										loadingModal.close()
+										const note =
+											selection + "\n\n___\n\n" + response
+										editor.replaceSelection(note)
+									} else {
+										// Show an error
+										new Notice(
+											"Error: Could not redact your note."
 										)
 									}
 								}

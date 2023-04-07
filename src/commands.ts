@@ -27,7 +27,7 @@ export const explain = async (text: string, apiKey: string) => {
 	const settings: GPTSettings = {
 		modelType: ModelType.Default,
 		maxTokens: 500,
-		temperature: 1.0,
+		temperature: 0.5, // Lower than defaults for fact-checking
 		topP: 1.0,
 		presencePenalty: 0,
 		frequencyPenalty: 0,
@@ -43,6 +43,47 @@ export const explain = async (text: string, apiKey: string) => {
 	)
 
 	return explanation
+}
+
+export const redact = async (text: string, apiKey: string) => {
+	// Don't send empty messages.
+	if (text === "") {
+		new Notice("Cannot send empty messages.")
+		return
+	}
+
+	const mentor = Individuals["default"]
+
+	const systemPrompt: Message = {
+		role: "system",
+		content:
+			"Now, you are Esnest Hemingway. I took notes in a bullet-point format. Please organize all the notes, and provide (where possible), 1 or 2 paragraphs for each. Provide definitions or examples if complex ideas are present. All notes have to be in the redacted text. Do not provide any explanations, just the redacted text. Use Markdown to give subtitles. Emphasize important points in bold or italics.",
+	}
+
+	const prompt: Message = {
+		role: "user",
+		content: `My notes are: ${text}`,
+	}
+
+	const settings: GPTSettings = {
+		modelType: ModelType.Default,
+		maxTokens: 1000,
+		temperature: 0.7, // todo: lower this?
+		topP: 1.0,
+		presencePenalty: 0,
+		frequencyPenalty: 0,
+		stop: [],
+	}
+
+	const redaction = await modelRequest(
+		prompt,
+		systemPrompt,
+		mentor,
+		settings,
+		apiKey
+	)
+
+	return redaction
 }
 
 const modelRequest = async (
