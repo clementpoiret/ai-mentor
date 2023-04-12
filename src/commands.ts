@@ -4,7 +4,11 @@ import { Individuals } from "./mentors"
 import { getGPTCompletion, GPTSettings, ModelType } from "./model"
 import { Mentor, Message } from "./types"
 
-export const explain = async (text: string, apiKey: string) => {
+export const explain = async (
+	text: string,
+	language: string,
+	apiKey: string
+) => {
 	// Don't send empty messages.
 	if (text === "") {
 		new Notice("Cannot send empty messages.")
@@ -38,6 +42,7 @@ export const explain = async (text: string, apiKey: string) => {
 		prompt,
 		systemPrompt,
 		mentor,
+		language,
 		settings,
 		apiKey
 	)
@@ -45,7 +50,11 @@ export const explain = async (text: string, apiKey: string) => {
 	return explanation
 }
 
-export const redact = async (text: string, apiKey: string) => {
+export const redact = async (
+	text: string,
+	language: string,
+	apiKey: string
+) => {
 	// Don't send empty messages.
 	if (text === "") {
 		new Notice("Cannot send empty messages.")
@@ -79,6 +88,7 @@ export const redact = async (text: string, apiKey: string) => {
 		prompt,
 		systemPrompt,
 		mentor,
+		language,
 		settings,
 		apiKey
 	)
@@ -90,13 +100,14 @@ const modelRequest = async (
 	prompt: Message,
 	systemPrompt: Message,
 	mentor: Mentor,
+	language: string,
 	settings: GPTSettings,
 	apiKey: string
 ): Promise<string> => {
 	const systemMessage: Message = {
 		role: "system",
 		content:
-			mentor.systemPrompt ||
+			mentor.systemPrompt[language] ||
 			"You are ChatGPT, a large language model trained by OpenAI. Answer as concisely as possible.",
 	}
 

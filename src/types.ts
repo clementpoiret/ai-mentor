@@ -1,7 +1,11 @@
+type MultiLingualString = {
+	[key: string]: string
+}
+
 export type Mentor = {
-	name: string
-	systemPrompt: string
-	firstMessage: string
+	name: MultiLingualString
+	systemPrompt: MultiLingualString
+	firstMessage: MultiLingualString
 }
 
 export type Role = "system" | "user" | "assistant"

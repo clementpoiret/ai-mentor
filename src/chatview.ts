@@ -13,12 +13,19 @@ export const VIEW_TYPE_CHAT = "mentor-chat-view"
 export class ChatView extends ItemView {
 	apiKey: string
 	preferredMentorId = "default"
+	preferredLanguage = "en"
 	firstOpen = true
 
-	constructor(leaf: WorkspaceLeaf, token: string, preferredMentorId: string) {
+	constructor(
+		leaf: WorkspaceLeaf,
+		token: string,
+		preferredMentorId: string,
+		preferredLanguage: string
+	) {
 		super(leaf)
 		this.apiKey = token
 		this.preferredMentorId = preferredMentorId
+		this.preferredLanguage = preferredLanguage
 	}
 
 	// Merge the two Record<string, Mentor> objects into one.
@@ -81,13 +88,13 @@ export class ChatView extends ItemView {
 		for (const mentor of Object.entries(Topics)) {
 			const optionEl = topicsGroup.createEl("option")
 			optionEl.value = mentor[0]
-			optionEl.text = mentor[1].name
+			optionEl.text = mentor[1].name[this.preferredLanguage]
 		}
 
 		for (const mentor of Object.entries(Individuals)) {
 			const optionEl = individualsGroup.createEl("option")
 			optionEl.value = mentor[0]
-			optionEl.text = mentor[1].name
+			optionEl.text = mentor[1].name[this.preferredLanguage]
 		}
 
 		selectEl.onchange = (evt) => {
@@ -102,7 +109,7 @@ export class ChatView extends ItemView {
 		// Add history to selectedMentor.firstMessage
 		const firstMessage: Message = {
 			role: "assistant",
-			content: selectedMentor.firstMessage,
+			content: selectedMentor.firstMessage[this.preferredLanguage],
 		}
 		const displayedMessages = [firstMessage, ...this.history]
 
@@ -235,7 +242,9 @@ export class ChatView extends ItemView {
 		const systemMessage: Message = {
 			role: "system",
 			content:
-				this.mentorList[this.selectedMentorId].systemPrompt ||
+				this.mentorList[this.selectedMentorId].systemPrompt[
+					this.preferredLanguage
+				] ||
 				"You are ChatGPT, a large language model trained by OpenAI. Answer as concisely as possible.",
 		}
 		const input = [
@@ -251,16 +260,29 @@ export class ChatView extends ItemView {
 			frequencyPenalty: 0,
 			stop: [],
 		}
-		const response = await getGPTCompletion(this.apiKey, input, settings)
 
-		this.history.pop()
-		this.history.push({ role: "assistant", content: response })
+		getGPTCompletion(this.apiKey, input, settings)
+			.then(async (response) => {
+				this.history.pop()
+				this.history.push({ role: "assistant", content: response })
 
-		// Refresh the view.
-		await this.onOpen()
+				// Refresh the view.
+				await this.onOpen()
 
-		// Clear the input.
-		this.currentInput = ""
+				// Clear the input.
+				this.currentInput = ""
+			})
+			.catch((error) => {
+				console.log("error", error)
+				this.history.pop()
+				this.history.push({ role: "assistant", content: "Error" })
+
+				// Refresh the view.
+				this.onOpen()
+
+				// Clear the input.
+				this.currentInput = ""
+			})
 	}
 
 	async handleClear() {
