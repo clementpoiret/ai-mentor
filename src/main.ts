@@ -1,14 +1,17 @@
 import { addIcon, Menu, Notice, Plugin } from "obsidian"
 
+import { commands } from "./ai/commands"
+import { Individuals } from "./ai/mentors"
+import { MentorModel } from "./ai/model"
 import { MentorIcon } from "./assets/icons/mentor"
-import { ChatView, VIEW_TYPE_CHAT } from "./chatview"
-import { explain, redact } from "./commands"
-import { MentorModal } from "./modals"
+import { ChatView, VIEW_TYPE_CHAT } from "./components/chatview"
+import { MentorModal } from "./components/modals"
 import SettingTab from "./settings"
+import { supportedLanguage } from "./types"
 
 interface MentorSettings {
 	preferredMentorId: string
-	language: string
+	language: supportedLanguage
 	token: string
 }
 
@@ -61,6 +64,13 @@ export default class ObsidianMentor extends Plugin {
 			},
 		})
 
+		// AI COMMANDS
+		const albert = new MentorModel(
+			"default",
+			Individuals["default"],
+			this.settings.token,
+			this.settings.language
+		)
 		// This adds the "ELI5" command.
 		this.addCommand({
 			id: "eli5",
@@ -77,21 +87,23 @@ export default class ObsidianMentor extends Plugin {
 				if (selection) {
 					loadingModal.open()
 
-					explain(
-						selection,
-						this.settings.language,
-						this.settings.token
-					).then((response) => {
-						// editor.replaceSelection(response)
-						if (response) {
-							// Show the explanation
-							loadingModal.close()
-							new MentorModal(this.app, title, response).open()
-						} else {
-							// Show an error
-							new Notice("Error: Could not get explanation.")
-						}
-					})
+					// Get the explanation
+					albert
+						.execute(selection, commands.explain)
+						.then((response) => {
+							if (response) {
+								// Show the explanation
+								loadingModal.close()
+								new MentorModal(
+									this.app,
+									title,
+									response
+								).open()
+							} else {
+								// Show an error
+								new Notice("Error: Could not get explanation.")
+							}
+						})
 				} else {
 					new Notice("Error: No text selected.")
 				}
@@ -117,27 +129,25 @@ export default class ObsidianMentor extends Plugin {
 						if (selection) {
 							loadingModal.open()
 
-							explain(
-								selection,
-								this.settings.language,
-								this.settings.token
-							).then((response) => {
-								// editor.replaceSelection(response)
-								if (response) {
-									// Show the explanation
-									loadingModal.close()
-									new MentorModal(
-										this.app,
-										title,
-										response
-									).open()
-								} else {
-									// Show an error
-									new Notice(
-										"Error: Could not get explanation."
-									)
-								}
-							})
+							// Get the explanation
+							albert
+								.execute(selection, commands.explain)
+								.then((response) => {
+									if (response) {
+										// Show the explanation
+										loadingModal.close()
+										new MentorModal(
+											this.app,
+											title,
+											response
+										).open()
+									} else {
+										// Show an error
+										new Notice(
+											"Error: Could not get explanation."
+										)
+									}
+								})
 						} else {
 							new Notice("Error: No text selected.")
 						}
@@ -162,22 +172,21 @@ export default class ObsidianMentor extends Plugin {
 				if (selection) {
 					loadingModal.open()
 
-					redact(
-						selection,
-						this.settings.language,
-						this.settings.token
-					).then((response) => {
-						// editor.replaceSelection(response)
-						if (response) {
-							// append a new line to the end of the note
-							loadingModal.close()
-							const note = selection + "\n\n___\n\n" + response
-							editor.replaceSelection(note)
-						} else {
-							// Show an error
-							new Notice("Error: Could not redact your note.")
-						}
-					})
+					// Get the redacted note
+					albert
+						.execute(selection, commands.redact)
+						.then((response) => {
+							if (response) {
+								// append a new line to the end of the note
+								loadingModal.close()
+								const note =
+									selection + "\n\n___\n\n" + response
+								editor.replaceSelection(note)
+							} else {
+								// Show an error
+								new Notice("Error: Could not redact your note.")
+							}
+						})
 				} else {
 					new Notice("Error: No text selected.")
 				}
@@ -202,25 +211,23 @@ export default class ObsidianMentor extends Plugin {
 						if (selection) {
 							loadingModal.open()
 
-							redact(
-								selection,
-								this.settings.language,
-								this.settings.token
-							).then((response) => {
-								// editor.replaceSelection(response)
-								if (response) {
-									// append a new line to the end of the note
-									loadingModal.close()
-									const note =
-										selection + "\n\n___\n\n" + response
-									editor.replaceSelection(note)
-								} else {
-									// Show an error
-									new Notice(
-										"Error: Could not redact your note."
-									)
-								}
-							})
+							// Get the redacted note
+							albert
+								.execute(selection, commands.redact)
+								.then((response) => {
+									if (response) {
+										// append a new line to the end of the note
+										loadingModal.close()
+										const note =
+											selection + "\n\n___\n\n" + response
+										editor.replaceSelection(note)
+									} else {
+										// Show an error
+										new Notice(
+											"Error: Could not redact your note."
+										)
+									}
+								})
 						} else {
 							new Notice("Error: No text selected.")
 						}

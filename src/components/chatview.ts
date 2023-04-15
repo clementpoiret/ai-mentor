@@ -1,42 +1,50 @@
 import { ItemView, Notice, WorkspaceLeaf } from "obsidian"
 
-import { CleanIcon } from "./assets/icons/clean"
-import { CopyIcon } from "./assets/icons/copy"
-import { SendIcon } from "./assets/icons/send"
-import { Individuals, Topics } from "./mentors"
-import { getGPTCompletion, GPTSettings, ModelType } from "./model"
-import { Mentor, Message } from "./types"
+import { Individuals, Topics } from "../ai/mentors"
+import { MentorModel } from "../ai/model"
+import { CleanIcon } from "../assets/icons/clean"
+import { CopyIcon } from "../assets/icons/copy"
+import { SendIcon } from "../assets/icons/send"
+import { Mentor, Message, supportedLanguage } from "../types"
 
 export const VIEW_TYPE_CHAT = "mentor-chat-view"
 
-// todo: verify icons and mouse events
 export class ChatView extends ItemView {
-	apiKey: string
 	preferredMentorId = "default"
 	preferredLanguage = "en"
 	firstOpen = true
-
-	constructor(
-		leaf: WorkspaceLeaf,
-		token: string,
-		preferredMentorId: string,
-		preferredLanguage: string
-	) {
-		super(leaf)
-		this.apiKey = token
-		this.preferredMentorId = preferredMentorId
-		this.preferredLanguage = preferredLanguage
-	}
+	// isTyping = false
+	displayedMessages: Message[] = []
 
 	// Merge the two Record<string, Mentor> objects into one.
 	mentorList: Record<string, Mentor> = {
 		...Topics,
 		...Individuals,
 	}
-	selectedMentorId = this.preferredMentorId
+
+	mentor: MentorModel
+
+	constructor(
+		leaf: WorkspaceLeaf,
+		token: string,
+		preferredMentorId: string,
+		preferredLanguage: supportedLanguage
+	) {
+		super(leaf)
+		this.preferredMentorId = preferredMentorId
+		this.preferredLanguage = preferredLanguage
+
+		// Mentor selection.
+		const selectedMentor = this.mentorList[preferredMentorId]
+		this.mentor = new MentorModel(
+			preferredMentorId,
+			selectedMentor,
+			token,
+			preferredLanguage
+		)
+	}
 
 	currentInput = ""
-	history: Message[] = []
 	loadingMessage: Message = { role: "assistant", content: "..." }
 
 	getViewType() {
@@ -66,9 +74,6 @@ export class ChatView extends ItemView {
 		container.addClass("chat")
 
 		container.createEl("h4", { text: "Your AI Mentor" })
-
-		// Mentor selection.
-		const selectedMentor = this.mentorList[this.selectedMentorId]
 
 		const mentorDiv = container.createDiv()
 		mentorDiv.addClass("chat__mentor")
@@ -100,20 +105,26 @@ export class ChatView extends ItemView {
 		selectEl.onchange = (evt) => {
 			this.handleMentorChange((evt.target as HTMLSelectElement).value)
 		}
-		selectEl.value = this.selectedMentorId
+		selectEl.value = this.mentor.id
 
 		// Display messages in the chat.
 		const chatDiv = container.createDiv()
 		chatDiv.addClass("chat__messages")
 
 		// Add history to selectedMentor.firstMessage
-		const firstMessage: Message = {
-			role: "assistant",
-			content: selectedMentor.firstMessage[this.preferredLanguage],
-		}
-		const displayedMessages = [firstMessage, ...this.history]
+		// const firstMessage: Message = {
+		// 	role: "assistant",
+		// 	content: selectedMentor.firstMessage[this.preferredLanguage],
+		// }
 
-		for (const message of displayedMessages) {
+		// Add the first message to the chat.
+
+		const history =
+			this.mentor.history.filter(
+				(message: Message) => message.role !== "system"
+			) || []
+
+		for (const message of this.displayedMessages) {
 			// Contains text and icon.
 			const messageDiv = chatDiv.createDiv()
 			messageDiv.addClass("chat__message-container")
@@ -157,7 +168,6 @@ export class ChatView extends ItemView {
 		inputEl.addClass("chat__input")
 		inputEl.oninput = (evt) => {
 			this.currentInput = (evt.target as HTMLInputElement).value
-			console.log(this.currentInput)
 		}
 		inputEl.onkeydown = (evt) => {
 			if (!evt.shiftKey) {
@@ -187,11 +197,16 @@ export class ChatView extends ItemView {
 	}
 
 	async handleMentorChange(id: string) {
-		// Update the selected mentor.
-		this.selectedMentorId = id
+		const newMentor = this.mentorList[id]
 
-		// Clear the chat.
-		this.history = []
+		this.mentor.changeIdentity(id, newMentor)
+
+		this.displayedMessages = [
+			{
+				role: "assistant",
+				content: newMentor.firstMessage[this.preferredLanguage],
+			},
+		]
 
 		// Refresh the view.
 		await this.onOpen()
@@ -208,7 +223,6 @@ export class ChatView extends ItemView {
 
 			const text = await this.app.vault.read(noteFile)
 
-			// Replace @current-note with the text of the note.
 			prompt = prompt.replace("@current-note", text)
 
 			return prompt
@@ -226,70 +240,64 @@ export class ChatView extends ItemView {
 
 		// Wait for the mentor to respond.
 		if (
-			this.history.length !== 0 &&
-			this.history[this.history.length - 1].role === "user"
+			this.mentor.history.length !== 0 &&
+			this.mentor.history[this.mentor.history.length - 1].role === "user"
 		) {
 			new Notice("Please wait for your mentor to respond.")
 			return
 		}
 
 		const prompt = await this.handleKeywordsInPrompt(this.currentInput)
-		const message: Message = { role: "user", content: prompt }
-		this.history.push(message)
-		this.history.push(this.loadingMessage)
+
+		// Display the prompt
+		this.displayedMessages.push({
+			role: "user",
+			content: prompt,
+		})
+
+		// Add the loading message
+		this.displayedMessages.push(this.loadingMessage)
 
 		// Refresh the view.
 		await this.onOpen()
 
-		const systemMessage: Message = {
-			role: "system",
-			content:
-				this.mentorList[this.selectedMentorId].systemPrompt[
-					this.preferredLanguage
-				] ||
-				"You are ChatGPT, a large language model trained by OpenAI. Answer as concisely as possible.",
-		}
-		const input = [
-			systemMessage,
-			...this.history.slice(0, this.history.length - 1),
-		]
-		const settings: GPTSettings = {
-			modelType: ModelType.Default,
-			maxTokens: 200,
-			temperature: 1.0,
-			topP: 1.0,
-			presencePenalty: 0,
-			frequencyPenalty: 0,
-			stop: [],
-		}
-
-		getGPTCompletion(this.apiKey, input, settings)
+		this.mentor
+			.getCompletion(prompt)
 			.then(async (response) => {
-				this.history.pop()
-				this.history.push({ role: "assistant", content: response })
+				// Clear the input.
+				this.currentInput = ""
+
+				// Display the response.
+				this.displayedMessages.pop()
+				this.displayedMessages.push({
+					role: "assistant",
+					content: response,
+				})
 
 				// Refresh the view.
 				await this.onOpen()
+			})
+			.catch(async (error) => {
+				console.log("error", error)
 
 				// Clear the input.
 				this.currentInput = ""
-			})
-			.catch((error) => {
-				console.log("error", error)
-				this.history.pop()
-				this.history.push({ role: "assistant", content: "Error" })
+
+				// Display the error message.
+				this.displayedMessages.pop()
+				this.displayedMessages.push({
+					role: "assistant",
+					content: "An error occurred. Please try again.",
+				})
 
 				// Refresh the view.
-				this.onOpen()
-
-				// Clear the input.
-				this.currentInput = ""
+				await this.onOpen()
 			})
 	}
 
 	async handleClear() {
 		// Keep only the first message.
-		this.history = []
+		this.mentor.reset()
 
 		// Refresh the view.
 		await this.onOpen()

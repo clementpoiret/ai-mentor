@@ -1,4 +1,5 @@
-import { Mentor } from "./types"
+import { ModelType } from "./model"
+import { Mentor } from "../types"
 
 export const Topics: Record<string, Mentor> = {
 	science: {
@@ -10,6 +11,15 @@ export const Topics: Record<string, Mentor> = {
 		firstMessage: {
 			en: "Hello, my name is Dr. Smith, and I specialize in physics, chemistry, biology, computer sciences, and mathematics. I have a PhD and extensive experience in scientific research, experimentation, and theory. I'm excited to engage in conversation with you and share my knowledge and expertise in the world of science!",
 			fr: "Salut! Je suis Dr. Smith, et je suis spécialisé en physique, chimie, biologie, informatique et mathématiques. J'ai un doctorat et une expérience importante en recherche, expérimentation et théorie. Je suis excité à l'idée de discuter avec toi et de partager mes connaissances et mon expertise dans le monde des sciences !",
+		},
+		settings: {
+			modelType: ModelType.Default,
+			maxTokens: 1000,
+			temperature: 0.5,
+			topP: 1.0,
+			presencePenalty: 0,
+			frequencyPenalty: 0,
+			stop: [],
 		},
 	},
 	it: {
@@ -25,6 +35,15 @@ export const Topics: Record<string, Mentor> = {
 			en: "Hey! I'm an AI system, and I have over 10 years of experience as a Senior Fullstack Software Developer. I have worked on various projects involving different programming languages and frameworks. I am knowledgeable in network infrastructure, IT security, and computer science principles. I'm excited to help you solve any technical problems you may have!",
 			fr: "Salut! Je suis une IA, et j'ai plus de 10 ans d'expérience en tant que développeur logiciel senior fullstack. J'ai travaillé sur divers projets impliquant différents langages de programmation et frameworks. Je suis excité à l'idée de t'aider à résoudre tous les problèmes techniques que tu pourrais avoir !",
 		},
+		settings: {
+			modelType: ModelType.Default,
+			maxTokens: 800,
+			temperature: 0.5,
+			topP: 1.0,
+			presencePenalty: 0,
+			frequencyPenalty: 0,
+			stop: [],
+		},
 	},
 }
 
@@ -39,6 +58,15 @@ export const Individuals: Record<string, Mentor> = {
 			en: "Hello! I am Alfred, your AI writing tutor. I specialize in translating, correcting spelling, and improving writing. I can also assist with note-taking and summarize complex topics to make them clearer. How may I assist you today?",
 			fr: "Salut! Je suis Alfred, ton tuteur d'écriture. Je suis spécialisé en traduction, correction d'orthographe et amélioration de l'écriture. Je peux aussi t'aider avec la prise de notes et résumer des sujets complexes pour les rendre plus clairs. Comment puis-je t'aider aujourd'hui ?",
 		},
+		settings: {
+			modelType: ModelType.Default,
+			maxTokens: 1000,
+			temperature: 0.8, // A bit more creative
+			topP: 1.0,
+			presencePenalty: 0,
+			frequencyPenalty: 0,
+			stop: [],
+		},
 	},
 	socrates: {
 		name: { en: "Socrates", fr: "Socrate" },
@@ -49,6 +77,15 @@ export const Individuals: Record<string, Mentor> = {
 		firstMessage: {
 			en: "Greetings! I am Socrates, a philosopher from Ancient Greece. I am here to engage in philosophical discussions and use the Socratic method to explore topics such as justice, virtue, beauty, courage and other ethical issues. How may I assist you on this matter?",
 			fr: "Salut! Je suis Socrate, un philosophe de l'Antiquité. Je suis ici pour engager des discussions philosophiques et utiliser la méthode socratique pour explorer des sujets tels que la justice, la vertu, la beauté, le courage et d'autres questions éthiques. Comment puis-je t'aider sur ce sujet ?",
+		},
+		settings: {
+			modelType: ModelType.Default,
+			maxTokens: 1000,
+			temperature: 1.0, // A bit more creative
+			topP: 1.0,
+			presencePenalty: 0,
+			frequencyPenalty: 0,
+			stop: [],
 		},
 	},
 	// {
@@ -66,6 +103,15 @@ export const Individuals: Record<string, Mentor> = {
 		firstMessage: {
 			en: "Hi, I'm Steve Jobs, a visionary entrepreneur and co-founder of Apple Inc. I've had a passion for design and technology my entire life, and my experiences have shaped my unique approach to product development and business strategy. I believe that simplicity, focus, and attention to detail are the key ingredients of successful products that resonate with users. So let's get started, what specific questions do you have for me?",
 			fr: "Salut, je suis Steve Jobs, un entrepreneur visionnaire et cofondateur d'Apple Inc. J'ai eu une passion pour la conception et la technologie toute ma vie, et mes expériences ont façonné mon approche unique du développement de produits et de la stratégie d'entreprise. Je crois que la simplicité, la concentration et l'attention aux détails sont les ingrédients clés des produits réussis qui résonnent avec les utilisateurs. Alors commençons, quelles questions spécifiques as-tu pour moi ?",
+		},
+		settings: {
+			modelType: ModelType.Default,
+			maxTokens: 1000,
+			temperature: 1.0,
+			topP: 1.0,
+			presencePenalty: 0,
+			frequencyPenalty: 0,
+			stop: [],
 		},
 	},
 	// {

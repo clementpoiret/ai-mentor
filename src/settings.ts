@@ -6,9 +6,9 @@ import {
 	TextComponent,
 } from "obsidian"
 
+import { Topics, Individuals } from "./ai/mentors"
 import ObsidianMentor from "./main"
-import { Topics, Individuals } from "./mentors"
-import { Mentor } from "./types"
+import { Mentor, supportedLanguage } from "./types"
 
 export default class SettingTab extends PluginSettingTab {
 	plugin: ObsidianMentor
@@ -40,7 +40,7 @@ export default class SettingTab extends PluginSettingTab {
 
 				dropdown.setValue(this.plugin.settings.language || "en")
 				dropdown.onChange((value) => {
-					this.plugin.settings.language = value
+					this.plugin.settings.language = value as supportedLanguage
 					this.plugin.saveSettings()
 				})
 			})
@@ -75,7 +75,7 @@ export default class SettingTab extends PluginSettingTab {
 			.addButton((button: ButtonComponent) => {
 				button.setButtonText("Generate token")
 				button.onClick((evt: MouseEvent) => {
-					window.open("https://beta.openai.com/account/api-keys")
+					window.open("https://platform.openai.com/account/api-keys")
 				})
 			})
 	}
