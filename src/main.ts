@@ -65,7 +65,7 @@ export default class ObsidianMentor extends Plugin {
 		})
 
 		// AI COMMANDS
-		const albert = new MentorModel(
+		const alfred = new MentorModel(
 			"default",
 			Individuals["default"],
 			this.settings.token,
@@ -88,7 +88,7 @@ export default class ObsidianMentor extends Plugin {
 					loadingModal.open()
 
 					// Get the explanation
-					albert
+					alfred
 						.execute(selection, commands.explain)
 						.then((response) => {
 							if (response) {
@@ -130,7 +130,7 @@ export default class ObsidianMentor extends Plugin {
 							loadingModal.open()
 
 							// Get the explanation
-							albert
+							alfred
 								.execute(selection, commands.explain)
 								.then((response) => {
 									if (response) {
@@ -173,7 +173,7 @@ export default class ObsidianMentor extends Plugin {
 					loadingModal.open()
 
 					// Get the redacted note
-					albert
+					alfred
 						.execute(selection, commands.redact)
 						.then((response) => {
 							if (response) {
@@ -212,7 +212,7 @@ export default class ObsidianMentor extends Plugin {
 							loadingModal.open()
 
 							// Get the redacted note
-							albert
+							alfred
 								.execute(selection, commands.redact)
 								.then((response) => {
 									if (response) {
