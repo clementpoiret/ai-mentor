@@ -6,6 +6,10 @@
 .icon-button {
   height: var(--input-height);
   width: var(--input-height);
+  max-width: 30px;
+  max-height: 30px;
+
+  align-self: center;
 }
 
 .icon-button--hidden {
@@ -26,13 +30,15 @@
   left: 16px;
   right: 28px;
 
-  align-items: stretch;
+  align-items: center;
   justify-content: center;
   gap: 4px;
 }
 
 .chat__input {
   width: 100%;
+
+  max-height: 30px;
 }
 
 .chat__clear-button {

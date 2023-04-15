@@ -152,16 +152,18 @@ export class ChatView extends ItemView {
 		const interationDiv = container.createDiv()
 		interationDiv.addClass("chat__interaction-container")
 
-		const inputEl = interationDiv.createEl("input")
-		inputEl.type = "text"
+		const inputEl = interationDiv.createEl("textarea")
 		inputEl.placeholder = "Ask a question..."
 		inputEl.addClass("chat__input")
 		inputEl.oninput = (evt) => {
 			this.currentInput = (evt.target as HTMLInputElement).value
+			console.log(this.currentInput)
 		}
 		inputEl.onkeydown = (evt) => {
-			if (evt.key === "Enter") {
-				this.handleSend()
+			if (!evt.shiftKey) {
+				if (evt.key === "Enter") {
+					this.handleSend()
+				}
 			}
 		}
 
