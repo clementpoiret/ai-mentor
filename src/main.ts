@@ -97,7 +97,7 @@ export default class ObsidianMentor extends Plugin {
 								new MentorModal(
 									this.app,
 									title,
-									response
+									response[0] // Only one possible response
 								).open()
 							} else {
 								// Show an error
@@ -139,7 +139,7 @@ export default class ObsidianMentor extends Plugin {
 										new MentorModal(
 											this.app,
 											title,
-											response
+											response[0] // Only one possible response
 										).open()
 									} else {
 										// Show an error
@@ -177,10 +177,12 @@ export default class ObsidianMentor extends Plugin {
 						.execute(selection, commands.redact)
 						.then((response) => {
 							if (response) {
+								const redactedNote = response[0]
+
 								// append a new line to the end of the note
 								loadingModal.close()
 								const note =
-									selection + "\n\n___\n\n" + response
+									selection + "\n\n___\n\n" + redactedNote
 								editor.replaceSelection(note)
 							} else {
 								// Show an error
@@ -216,10 +218,13 @@ export default class ObsidianMentor extends Plugin {
 								.execute(selection, commands.redact)
 								.then((response) => {
 									if (response) {
+										const redactedNote = response[0]
 										// append a new line to the end of the note
 										loadingModal.close()
 										const note =
-											selection + "\n\n___\n\n" + response
+											selection +
+											"\n\n___\n\n" +
+											redactedNote
 										editor.replaceSelection(note)
 									} else {
 										// Show an error
@@ -235,6 +240,51 @@ export default class ObsidianMentor extends Plugin {
 				})
 			})
 		)
+
+		// This adds the "enhance" command.
+		this.addCommand({
+			id: "enhance",
+			name: "Enhance",
+			editorCallback: async (editor) => {
+				const title = "Enhance my writing"
+				const selection = editor.getSelection()
+				const loadingModal = new MentorModal(
+					this.app,
+					title,
+					"I am enhancing what you wrote..."
+				)
+
+				if (selection) {
+					loadingModal.open()
+
+					// Get the redacted note
+					alfred
+						.execute(selection, commands.enhance)
+						.then((response) => {
+							if (response) {
+								const [enhancedText, explanations] = response
+
+								// replace the selection with the enhanced text
+								loadingModal.close()
+								editor.replaceSelection(enhancedText)
+
+								new MentorModal(
+									this.app,
+									title,
+									explanations
+								).open()
+							} else {
+								// Show an error
+								new Notice(
+									"Error: Could not enhance your note."
+								)
+							}
+						})
+				} else {
+					new Notice("Error: No text selected.")
+				}
+			},
+		})
 	}
 
 	async activateView() {

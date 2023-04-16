@@ -299,6 +299,15 @@ export class ChatView extends ItemView {
 		// Keep only the first message.
 		this.mentor.reset()
 
+		// Clear the displayed messages.
+		this.displayedMessages = [
+			{
+				role: "assistant",
+				content:
+					this.mentor.mentor.firstMessage[this.preferredLanguage],
+			},
+		]
+
 		// Refresh the view.
 		await this.onOpen()
 	}

@@ -108,63 +108,72 @@ export class MentorModel {
 			.catch((err) => {
 				console.error(err)
 
-				const answer = "I got an error when trying to reply."
+				return "I got an error when trying to reply."
 			})
 
 		return answer
 	}
 
-	async execute(text: string, command: Command): Promise<string> {
+	async execute(text: string, command: Command): Promise<string[]> {
 		const { modelType, ...params } = command.settings
 		const mentorList: Record<string, Mentor> = {
 			...Topics,
 			...Individuals,
 		}
 		const requestedMentor = mentorList[command.mentor]
-		const prompt = command.pattern[this.preferredLanguage].replace(
-			"*",
-			text
-		)
+		const prompts = command.pattern.map((prompt) => {
+			return prompt[this.preferredLanguage].replace("*", text)
+		})
 
-		const messages = [
+		this.history = [
 			{
 				role: "system",
 				content: requestedMentor.systemPrompt[this.preferredLanguage],
 			},
 			command.prompt[this.preferredLanguage],
-			{ role: "user", content: prompt },
 		]
+		const answers: string[] = []
 
-		console.log(messages)
+		console.log("prompts", prompts, prompts.length)
 
-		const body = {
-			messages,
-			model: modelType,
-			...pythonifyKeys(params),
-			stop: params.stop.length > 0 ? params.stop : undefined,
-			suffix: this.suffix,
+		for (const prompt of prompts) {
+			this.history.push({ role: "user", content: prompt })
+
+			const body = {
+				messages: this.history,
+				model: modelType,
+				...pythonifyKeys(params),
+				stop: params.stop.length > 0 ? params.stop : undefined,
+				suffix: this.suffix,
+			}
+
+			const headers = this.headers
+			const requestUrlParam: RequestUrlParam = {
+				url: this.apiUrl,
+				method: "POST",
+				contentType: "application/json",
+				body: JSON.stringify(body),
+				headers,
+			}
+
+			const answer = await request(requestUrlParam)
+				.then((response) => {
+					return JSON.parse(response)?.choices?.[0]?.message?.content
+				})
+				.catch((err) => {
+					console.error(err)
+
+					return "I got an error when trying to reply."
+				})
+
+			this.history.push({ role: "assistant", content: answer })
+			answers.push(answer)
 		}
 
-		const headers = this.headers
-		const requestUrlParam: RequestUrlParam = {
-			url: this.apiUrl,
-			method: "POST",
-			contentType: "application/json",
-			body: JSON.stringify(body),
-			headers,
-		}
+		// Reset history
+		this.reset()
 
-		const answer = await request(requestUrlParam)
-			.then((response) => {
-				return JSON.parse(response)?.choices?.[0]?.message?.content
-			})
-			.catch((err) => {
-				console.error(err)
-
-				return "I got an error when trying to reply."
-			})
-
-		return answer
+		return answers
 	}
 
 	changeIdentity(id: string, newMentor: Mentor) {
