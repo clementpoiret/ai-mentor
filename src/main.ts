@@ -182,7 +182,10 @@ export default class ObsidianMentor extends Plugin {
 								// append a new line to the end of the note
 								loadingModal.close()
 								const note =
-									selection + "\n\n___\n\n" + redactedNote
+									selection +
+									"\n\n___\n\n" +
+									redactedNote +
+									"\n\n___\n\n"
 								editor.replaceSelection(note)
 							} else {
 								// Show an error
@@ -224,7 +227,8 @@ export default class ObsidianMentor extends Plugin {
 										const note =
 											selection +
 											"\n\n___\n\n" +
-											redactedNote
+											redactedNote +
+											"\n\n___\n\n"
 										editor.replaceSelection(note)
 									} else {
 										// Show an error
@@ -285,6 +289,56 @@ export default class ObsidianMentor extends Plugin {
 				}
 			},
 		})
+
+		// Also add enhance to the right-click context menu
+		this.registerEvent(
+			this.app.workspace.on("editor-menu", (menu: Menu, editor, view) => {
+				menu.addItem((item) => {
+					item.setTitle("Enhance")
+					item.setIcon("aimentor")
+					item.onClick(() => {
+						const title = "Enhance my writing"
+						const selection = editor.getSelection()
+						const loadingModal = new MentorModal(
+							this.app,
+							title,
+							"I am enhancing what you wrote..."
+						)
+
+						if (selection) {
+							loadingModal.open()
+
+							// Get the redacted note
+							alfred
+								.execute(selection, commands.enhance)
+								.then((response) => {
+									if (response) {
+										const [enhancedText, explanations] =
+											response
+
+										// replace the selection with the enhanced text
+										loadingModal.close()
+										editor.replaceSelection(enhancedText)
+
+										new MentorModal(
+											this.app,
+											title,
+											explanations
+										).open()
+									} else {
+										// Show an error
+										new Notice(
+											"Error: Could not enhance your note."
+										)
+									}
+								})
+						} else {
+							new Notice("Error: No text selected.")
+						}
+					})
+				})
+			})
+		)
 	}
 
 	async activateView() {

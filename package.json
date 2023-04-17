@@ -1,6 +1,6 @@
 {
   "name": "obsidian-mentor",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Meet your open source AI mentor in Obsidian. Ask questions, get answers, and learn new things.",
   "main": "main.js",
   "scripts": {

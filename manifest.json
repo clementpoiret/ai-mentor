@@ -1,11 +1,11 @@
 {
-	"id": "obsidian-mentor",
-	"name": "Obsidian Mentor",
-	"version": "0.0.1",
-	"minAppVersion": "0.15.0",
-	"description": "Meet your open source AI mentor in Obsidian. Ask questions, get answers, and learn new things.",
-	"author": "Clément POIRET",
-	"authorUrl": "https://clementpoiret.com",
-	"fundingUrl": "https://clementpoiret.com",
-	"isDesktopOnly": false
+  "id": "obsidian-mentor",
+  "name": "Obsidian Mentor",
+  "version": "1.0.0",
+  "minAppVersion": "0.15.0",
+  "description": "Meet your open source AI mentor in Obsidian. Ask questions, get answers, and learn new things.",
+  "author": "Clément POIRET",
+  "authorUrl": "https://clementpoiret.com",
+  "fundingUrl": "https://clementpoiret.com",
+  "isDesktopOnly": false
 }

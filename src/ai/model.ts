@@ -1,6 +1,7 @@
 // Inspired by `https://github.com/jmilldotdev/obsidian-gpt/blob/main/src/models/chatGPT.ts`
 
 import { RequestUrlParam, request } from "obsidian"
+
 import { pythonifyKeys } from "src/utils"
 
 import { Command } from "./commands"
