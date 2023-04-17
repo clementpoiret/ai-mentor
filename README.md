@@ -1,4 +1,4 @@
-# Obsidian Mentor Plugin
+# Obsidian AI Mentor Plugin
 
 ## Authors & Contributors
 
@@ -6,15 +6,15 @@
 
 ## Introduction
 
-The Obsidian Mentor Plugin is an innovative tool that aims to supercharge your note-taking experience by utilizing advanced AI technology. With this plugin, you'll be mentored by Alfred, an intelligent agent who is responsible for improving your writing skills and formatting your notes.
+The Obsidian AI Mentor Plugin is an innovative tool that aims to supercharge your note-taking experience by utilizing advanced AI technology. With this plugin, you'll be mentored by Alfred, an intelligent agent who is responsible for improving your writing skills and formatting your notes.
 
-## Advantages of the Obsidian Mentor Plugin
+## Advantages of the AI Mentor Plugin
 
 One of the key advantages of this plugin is that it allows you to receive advice and inspiration from some of the world's greatest minds, such as Socrates or Steve Jobs. You can also use the plugin to explain anything by selecting a text in your note, which is a helpful feature for anyone who needs to clarify complex ideas.
 
-In addition, the Obsidian Mentor Plugin enables you to redact anything from a bullet-point list, making it easier to organize and refine your notes. Finally, the plugin can correct and enhance any text you write, ensuring that your notes are error-free and beautifully written.
+In addition, the AI Mentor Plugin enables you to redact anything from a bullet-point list, making it easier to organize and refine your notes. Finally, the plugin can correct and enhance any text you write, ensuring that your notes are error-free and beautifully written.
 
-By using the Obsidian Mentor Plugin, you'll be able to take your note-taking to the next level and achieve greater success in your studies or career.
+By using the AI Mentor Plugin, you'll be able to take your note-taking to the next level and achieve greater success in your studies or career.
 
 The repo depends on the latest plugin API (obsidian.d.ts) in Typescript Definition format, which contains TSDoc comments describing what it does.
 

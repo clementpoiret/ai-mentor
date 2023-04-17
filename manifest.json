@@ -1,6 +1,6 @@
 {
-  "id": "obsidian-mentor",
-  "name": "Obsidian Mentor",
+  "id": "ai-mentor",
+  "name": "AI Mentor",
   "version": "1.0.0",
   "minAppVersion": "0.15.0",
   "description": "Meet your open source AI mentor in Obsidian. Ask questions, get answers, and learn new things.",
