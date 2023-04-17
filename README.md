@@ -66,7 +66,7 @@ Select a bullet-point list and, right-click on it to open the context menu (also
 
 Select a text and, right-click on it to open the context menu (also available in the commands). Then, click on the "ELI5" option to explain the text.
 
-![Explain](docs/assets/explain.png)
+![Explain](docs/assets/eli5.png)
 
 ### Enhance a text
 
