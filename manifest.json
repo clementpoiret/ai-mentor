@@ -5,7 +5,7 @@
   "minAppVersion": "0.15.0",
   "description": "Meet your open source AI mentor in Obsidian. Ask questions, get answers, and learn new things.",
   "author": "Clément POIRET",
-  "authorUrl": "https://clementpoiret.com",
-  "fundingUrl": "https://clementpoiret.com",
+  "authorUrl": "https://github.com/clementpoiret",
+  "fundingUrl": "https://www.buymeacoffee.com/poiretclement",
   "isDesktopOnly": false
 }

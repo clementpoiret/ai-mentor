@@ -8,6 +8,8 @@
 
 The Obsidian AI Mentor Plugin is an innovative tool that aims to supercharge your note-taking experience by utilizing advanced AI technology. With this plugin, you'll be mentored by Alfred, an intelligent agent who is responsible for improving your writing skills and formatting your notes.
 
+Right now, this plugin uses OpenAI's APIs, but in the future, it will be able to use other AI services, such as Cohere or Anthropic.
+
 ## Advantages of the AI Mentor Plugin
 
 One of the key advantages of this plugin is that it allows you to receive advice and inspiration from some of the world's greatest minds, such as Socrates or Steve Jobs. You can also use the plugin to explain anything by selecting a text in your note, which is a helpful feature for anyone who needs to clarify complex ideas.
