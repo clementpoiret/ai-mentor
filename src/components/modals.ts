@@ -1,4 +1,4 @@
-import { App, Modal } from "obsidian"
+import { App, Modal, Notice } from "obsidian"
 
 export class MentorModal extends Modal {
 	title = ""
@@ -19,6 +19,16 @@ export class MentorModal extends Modal {
 		const textEl = contentEl.createDiv("text")
 		textEl.addClass("modal__text")
 		textEl.setText(this.displayedText)
+
+		// Copy text when clicked
+		textEl.addEventListener("click", () => {
+			navigator.clipboard.writeText(this.displayedText)
+			new Notice("Copied to clipboard")
+		})
+		textEl.addEventListener("contextmenu", () => {
+			navigator.clipboard.writeText(this.displayedText)
+			new Notice("Copied to clipboard")
+		})
 	}
 
 	onClose() {
