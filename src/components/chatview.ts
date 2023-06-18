@@ -160,6 +160,17 @@ export class ChatView extends ItemView {
 		}
 
 		// Add a text input.
+		// Dealing with Textarea Height
+		function calcHeight(value: string) {
+			const numberOfLineBreaks = (value.match(/\n/g) || []).length
+
+			console.log(numberOfLineBreaks)
+
+			// min-height + lines x line-height + padding + border
+			const newHeight = 16 + numberOfLineBreaks * 16 + 12 + 2
+			console.log(newHeight)
+			return newHeight
+		}
 		const interationDiv = container.createDiv()
 		interationDiv.addClass("chat__interaction-container")
 
@@ -175,6 +186,10 @@ export class ChatView extends ItemView {
 					this.handleSend()
 				}
 			}
+		}
+		inputEl.onkeyup = (evt) => {
+			// Resize the input element to fit the text.
+			inputEl.style.height = calcHeight(this.currentInput) + "px"
 		}
 
 		// Add a send button.
