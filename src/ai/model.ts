@@ -1,7 +1,6 @@
 // Inspired by `https://github.com/jmilldotdev/obsidian-gpt/blob/main/src/models/chatGPT.ts`
 
 import { RequestUrlParam, request } from "obsidian"
-
 import { pythonifyKeys } from "src/utils"
 
 import { Command } from "./commands"
@@ -10,6 +9,7 @@ import { Mentor, Message, supportedLanguage } from "../types"
 
 export enum ModelType {
 	Default = "gpt-3.5-turbo",
+	GPT3516k = "gpt-3.5-turbo-16k",
 	GPT4 = "gpt-4",
 }
 
