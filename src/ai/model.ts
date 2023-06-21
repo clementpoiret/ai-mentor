@@ -139,8 +139,6 @@ export class MentorModel {
 		]
 		const answers: string[] = []
 
-		console.log("prompts", prompts, prompts.length)
-
 		for (const prompt of prompts) {
 			this.history.push({ role: "user", content: prompt })
 

@@ -168,11 +168,8 @@ export class ChatView extends ItemView {
 		function calcHeight(value: string) {
 			const numberOfLineBreaks = (value.match(/\n/g) || []).length
 
-			console.log(numberOfLineBreaks)
-
 			// min-height + lines x line-height + padding + border
 			const newHeight = 16 + numberOfLineBreaks * 16 + 12 + 2
-			console.log(newHeight)
 			return newHeight
 		}
 		const interationDiv = container.createDiv()
