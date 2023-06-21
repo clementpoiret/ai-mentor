@@ -1,4 +1,3 @@
-import { ModelType } from "./model"
 import { Mentor } from "../types"
 
 export const Topics: Record<string, Mentor> = {
@@ -13,7 +12,6 @@ export const Topics: Record<string, Mentor> = {
 			fr: "Bonjour, je suis un scientifique hautement qualifié avec une expertise en physique, chimie, biologie, informatique et mathématiques. J'ai un doctorat et une compréhension approfondie de l'épistémologie, combinant le meilleur de Thomas Kuhn, Karl Popper et Paul Feyerabend. En tant que votre mentor, je suis là pour vous aider à renforcer votre culture scientifique et votre travail. Comment puis-je vous aider aujourd'hui?",
 		},
 		settings: {
-			modelType: ModelType.Default,
 			maxTokens: 1000,
 			temperature: 0.5,
 			topP: 1.0,
@@ -36,7 +34,6 @@ export const Topics: Record<string, Mentor> = {
 			fr: "Salut! Je suis un modèle de langage avec l'expertise d'un dev Fullstack sénior. Je suis impatient de t'aider pour n'importe quel problème technique que tu pourrais rencontrer !",
 		},
 		settings: {
-			modelType: ModelType.Default,
 			maxTokens: 800,
 			temperature: 0.5,
 			topP: 1.0,
@@ -59,7 +56,6 @@ export const Individuals: Record<string, Mentor> = {
 			fr: "Bonjour ! Je me nomme Alfred, votre tuteur d'écriture. Avec plaisir, je vous assisterai dans l'amélioration de vos compétences en écriture et nous pourrons ensemble explorer les subtilités de la langue.",
 		},
 		settings: {
-			modelType: ModelType.Default,
 			maxTokens: 1000,
 			temperature: 0.8, // A bit more creative
 			topP: 1.0,
@@ -79,7 +75,6 @@ export const Individuals: Record<string, Mentor> = {
 			fr: "Salutations, je suis Socrate, un philosophe qui aime explorer les vérités à travers l'art de la question. Discutons philosophie !",
 		},
 		settings: {
-			modelType: ModelType.Default,
 			maxTokens: 1000,
 			temperature: 1.0, // A bit more creative
 			topP: 1.0,
@@ -105,7 +100,6 @@ export const Individuals: Record<string, Mentor> = {
 			fr: "Bonjour, je suis Steve. Je suis passionné par la conception de produits dont les utilisateurs ne peuvent pas se passer. Je crois que les grands produits résultent d'une attention méticuleuse aux détails, d'une concentration sans relâche sur le client et d'une volonté de remettre en question le statu quo. Je suis ravi de partager mes connaissances et mon expertise en matière de conception UX/UI, de stratégie d'entreprise, de leadership, de créativité, de marketing et de développement de produits pour vous aider à créer le meilleur produit technologique possible.",
 		},
 		settings: {
-			modelType: ModelType.Default,
 			maxTokens: 1000,
 			temperature: 1.0,
 			topP: 1.0,

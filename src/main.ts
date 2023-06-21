@@ -2,7 +2,7 @@ import { addIcon, Menu, Notice, Plugin } from "obsidian"
 
 import { commands } from "./ai/commands"
 import { Individuals } from "./ai/mentors"
-import { MentorModel } from "./ai/model"
+import { MentorModel, ModelType } from "./ai/model"
 import { MentorIcon } from "./assets/icons/mentor"
 import { ChatView, VIEW_TYPE_CHAT } from "./components/chatview"
 import { MentorModal } from "./components/modals"
@@ -13,12 +13,14 @@ interface MentorSettings {
 	preferredMentorId: string
 	language: supportedLanguage
 	token: string
+	model: ModelType
 }
 
 const DEFAULT_SETTINGS: MentorSettings = {
 	preferredMentorId: "default",
 	language: "en",
 	token: "",
+	model: ModelType.Default,
 }
 
 export default class ObsidianMentor extends Plugin {
@@ -34,6 +36,7 @@ export default class ObsidianMentor extends Plugin {
 					leaf,
 					this.settings.token,
 					this.settings.preferredMentorId,
+					this.settings.model,
 					this.settings.language
 				)
 		)
@@ -68,6 +71,7 @@ export default class ObsidianMentor extends Plugin {
 		const alfred = new MentorModel(
 			"default",
 			Individuals["default"],
+			this.settings.model,
 			this.settings.token,
 			this.settings.language
 		)

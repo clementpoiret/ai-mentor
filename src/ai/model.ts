@@ -11,10 +11,10 @@ export enum ModelType {
 	Default = "gpt-3.5-turbo",
 	GPT3516k = "gpt-3.5-turbo-16k",
 	GPT4 = "gpt-4",
+	Davinci = "text-davinci-003",
 }
 
 export interface GPTSettings {
-	modelType: ModelType
 	maxTokens: number
 	temperature: number
 	topP: number
@@ -24,7 +24,6 @@ export interface GPTSettings {
 }
 
 export const defaultSettings: GPTSettings = {
-	modelType: ModelType.Default,
 	maxTokens: 200,
 	temperature: 1.0,
 	topP: 1.0,
@@ -39,6 +38,8 @@ export class MentorModel {
 	id: string
 	mentor: Mentor
 
+	model: ModelType
+
 	apiKey: string
 	preferredLanguage: supportedLanguage
 
@@ -51,12 +52,15 @@ export class MentorModel {
 	constructor(
 		id: string,
 		mentor: Mentor,
+		model: ModelType,
 		apiKey: string,
 		preferredLanguage: supportedLanguage,
 		suffix?: string
 	) {
 		this.id = id
 		this.mentor = mentor
+
+		this.model = model
 
 		this.apiKey = apiKey
 		this.preferredLanguage = preferredLanguage
@@ -74,13 +78,13 @@ export class MentorModel {
 	}
 
 	async getCompletion(message: string): Promise<string> {
-		const { modelType, ...params } = this.mentor.settings
+		const params = this.mentor.settings
 
 		const messages = [...this.history, { role: "user", content: message }]
 
 		const body = {
 			messages,
-			model: modelType,
+			model: this.model,
 			...pythonifyKeys(params),
 			stop: params.stop.length > 0 ? params.stop : undefined,
 			suffix: this.suffix,
@@ -116,7 +120,7 @@ export class MentorModel {
 	}
 
 	async execute(text: string, command: Command): Promise<string[]> {
-		const { modelType, ...params } = command.settings
+		const params = command.settings
 		const mentorList: Record<string, Mentor> = {
 			...Topics,
 			...Individuals,
@@ -142,7 +146,7 @@ export class MentorModel {
 
 			const body = {
 				messages: this.history,
-				model: modelType,
+				model: this.model,
 				...pythonifyKeys(params),
 				stop: params.stop.length > 0 ? params.stop : undefined,
 				suffix: this.suffix,

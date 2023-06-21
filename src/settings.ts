@@ -7,6 +7,7 @@ import {
 } from "obsidian"
 
 import { Topics, Individuals } from "./ai/mentors"
+import { ModelType } from "./ai/model"
 import ObsidianMentor from "./main"
 import { Mentor, supportedLanguage } from "./types"
 
@@ -76,6 +77,22 @@ export default class SettingTab extends PluginSettingTab {
 				button.setButtonText("Generate token")
 				button.onClick((evt: MouseEvent) => {
 					window.open("https://platform.openai.com/account/api-keys")
+				})
+			})
+
+		new Setting(containerEl)
+			.setName("Preferred Model")
+			.setDesc("The model you want to use.")
+			.addDropdown((dropdown) => {
+				dropdown.addOption("gpt-3.5-turbo", "GPT-3.5 Turbo")
+				dropdown.addOption("gpt-3.5-turbo-16k", "GPT-3.5 Turbo 16k")
+				dropdown.addOption("gpt-4", "GPT-4")
+				dropdown.addOption("text-davinci-003", "Davinci 003")
+
+				dropdown.setValue(this.plugin.settings.model || "gpt-3.5-turbo")
+				dropdown.onChange((value) => {
+					this.plugin.settings.model = value as ModelType
+					this.plugin.saveSettings()
 				})
 			})
 	}

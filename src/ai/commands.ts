@@ -1,4 +1,4 @@
-import { GPTSettings, ModelType } from "./model"
+import { GPTSettings } from "./model"
 import { Message, MultiLingualString, supportedLanguage } from "../types"
 
 export interface Command {
@@ -25,7 +25,6 @@ export const commands: Record<string, Command> = {
 		},
 		pattern: [{ fr: 'Explique: "*"', en: 'Explain: "*"' }],
 		settings: {
-			modelType: ModelType.Default,
 			maxTokens: 500,
 			temperature: 0.5, // Lower than defaults for fact-checking
 			topP: 1.0,
@@ -50,7 +49,6 @@ export const commands: Record<string, Command> = {
 		},
 		pattern: [{ fr: 'Mes notes sont : "*"', en: 'My notes are: "*"' }],
 		settings: {
-			modelType: ModelType.Default,
 			maxTokens: 2000,
 			temperature: 0.7, // todo: lower this?
 			topP: 1.0,
@@ -81,7 +79,6 @@ export const commands: Record<string, Command> = {
 			},
 		],
 		settings: {
-			modelType: ModelType.Default,
 			maxTokens: 2000,
 			temperature: 0.7, // todo: lower this?
 			topP: 1.0,

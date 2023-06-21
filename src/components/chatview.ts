@@ -1,7 +1,7 @@
 import { ItemView, Notice, WorkspaceLeaf } from "obsidian"
 
 import { Individuals, Topics } from "../ai/mentors"
-import { MentorModel } from "../ai/model"
+import { MentorModel, ModelType } from "../ai/model"
 import { CleanIcon } from "../assets/icons/clean"
 import { CopyIcon } from "../assets/icons/copy"
 import { SendIcon } from "../assets/icons/send"
@@ -12,6 +12,7 @@ export const VIEW_TYPE_CHAT = "mentor-chat-view"
 export class ChatView extends ItemView {
 	preferredMentorId = "default"
 	preferredLanguage = "en"
+	model: ModelType
 	firstOpen = true
 	// isTyping = false
 	displayedMessages: Message[] = []
@@ -28,17 +29,20 @@ export class ChatView extends ItemView {
 		leaf: WorkspaceLeaf,
 		token: string,
 		preferredMentorId: string,
+		model: ModelType,
 		preferredLanguage: supportedLanguage
 	) {
 		super(leaf)
 		this.preferredMentorId = preferredMentorId
 		this.preferredLanguage = preferredLanguage
+		this.model = model
 
 		// Mentor selection.
 		const selectedMentor = this.mentorList[preferredMentorId]
 		this.mentor = new MentorModel(
 			preferredMentorId,
 			selectedMentor,
+			this.model,
 			token,
 			preferredLanguage
 		)
