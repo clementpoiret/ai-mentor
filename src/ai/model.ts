@@ -80,6 +80,21 @@ export class MentorModel {
 	async getCompletion(message: string): Promise<string> {
 		const params = this.mentor.settings
 
+		// Check that API Key is set
+		if (!this.apiKey) {
+			return "Please set your OpenAI API key in the settings."
+		}
+
+		// Check that the model is set
+		if (!this.model) {
+			return "Please set your OpenAI model in the settings."
+		}
+
+		// Check that the message is not empty
+		if (!message) {
+			return "Please enter a message."
+		}
+
 		const messages = [...this.history, { role: "user", content: message }]
 
 		const body = {
