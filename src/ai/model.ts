@@ -8,10 +8,9 @@ import { Individuals, Topics } from "./mentors"
 import { Mentor, Message, supportedLanguage } from "../types"
 
 export enum ModelType {
-	Default = "gpt-3.5-turbo",
-	GPT3516k = "gpt-3.5-turbo-16k",
+	Default = "gpt-4-1106-preview",
 	GPT4 = "gpt-4",
-	Davinci = "text-davinci-003",
+	GPT432k = "gpt-4-32k",
 }
 
 export interface GPTSettings {
