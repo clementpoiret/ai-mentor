@@ -48,7 +48,7 @@ export const defaultSettings: GPTSettings = {
 }
 
 export class MentorModel {
-	apiUrl: String
+	apiUrl: string
 
 	id: string
 	mentor: Mentor
@@ -76,7 +76,8 @@ export class MentorModel {
 		this.id = id
 		this.mentor = mentor
 
-		this.apiUrl = ApiUrl[cloudProvider]
+		this.apiUrl =
+			cloudProvider === "perplexity" ? ApiUrl.perplexity : ApiUrl.openai
 
 		this.model = model
 

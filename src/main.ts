@@ -42,12 +42,12 @@ export default class ObsidianMentor extends Plugin {
 					leaf,
 					this.settings.cloudProvider,
 					this.settings.cloudProvider === "perplexity"
-						? this.settings.perplexityToken
-						: this.settings.openAiToken,
+						? (this.settings.perplexityToken as ModelType)
+						: (this.settings.openAiToken as ModelType),
 					this.settings.preferredMentorId,
 					this.settings.cloudProvider === "perplexity"
-						? this.settings.perplexityModel
-						: this.settings.openAiModel,
+						? (this.settings.perplexityModel as ModelType)
+						: (this.settings.openAiModel as ModelType),
 					this.settings.language
 				)
 		)
@@ -84,11 +84,11 @@ export default class ObsidianMentor extends Plugin {
 			Individuals["default"],
 			this.settings.cloudProvider,
 			this.settings.cloudProvider === "perplexity"
-				? this.settings.perplexityModel
-				: this.settings.openAiModel,
+				? (this.settings.perplexityModel as ModelType)
+				: (this.settings.openAiModel as ModelType),
 			this.settings.cloudProvider === "perplexity"
-				? this.settings.perplexityToken
-				: this.settings.openAiToken,
+				? (this.settings.perplexityToken as ModelType)
+				: (this.settings.openAiToken as ModelType),
 			this.settings.language
 		)
 		// This adds the "ELI5" command.

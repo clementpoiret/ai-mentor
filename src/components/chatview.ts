@@ -30,13 +30,13 @@ export class ChatView extends ItemView {
 		cloudProvider: string,
 		token: string,
 		preferredMentorId: string,
-		model: ModelType,
+		model: string,
 		preferredLanguage: supportedLanguage
 	) {
 		super(leaf)
 		this.preferredMentorId = preferredMentorId
 		this.preferredLanguage = preferredLanguage
-		this.model = model
+		this.model = model as ModelType
 
 		// Mentor selection.
 		const selectedMentor = this.mentorList[preferredMentorId]
