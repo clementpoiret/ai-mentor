@@ -8,7 +8,7 @@
 
 The Obsidian AI Mentor Plugin is an innovative tool that aims to supercharge your note-taking experience by utilizing advanced AI technology. With this plugin, you'll be mentored by Alfred, an intelligent agent who is responsible for improving your writing skills and formatting your notes.
 
-Right now, this plugin uses OpenAI's APIs, but in the future, it will be able to use other AI services, such as Cohere or Anthropic.
+Right now, as of v1.1.0, this plugin can use both OpenAI APIs and Perplexity APIs. This means that beyond GPT4 Turbo, you can also use Llama2 or Mixtral 8x7b! Another cool feature is that you can use pplx-*b-online models, meaning your answer will always be up-to-date thanks to sources coming from the web.
 
 ## Advantages of the AI Mentor Plugin
 
