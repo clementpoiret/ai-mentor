@@ -12,15 +12,21 @@ import { supportedLanguage } from "./types"
 interface MentorSettings {
 	preferredMentorId: string
 	language: supportedLanguage
-	token: string
-	model: ModelType
+	perplexityToken: string
+	perplexityModel: string
+	openAiToken: string
+	openAiModel: string
+	cloudProvider: string
 }
 
 const DEFAULT_SETTINGS: MentorSettings = {
 	preferredMentorId: "default",
 	language: "en",
-	token: "",
-	model: ModelType.Default,
+	perplexityToken: "",
+	perplexityModel: ModelType.PerplexityDefault,
+	openAiToken: "",
+	openAiModel: ModelType.OpenAiDefault,
+	cloudProvider: "perplexity",
 }
 
 export default class ObsidianMentor extends Plugin {
@@ -34,9 +40,14 @@ export default class ObsidianMentor extends Plugin {
 			(leaf) =>
 				new ChatView(
 					leaf,
-					this.settings.token,
+					this.settings.cloudProvider,
+					this.settings.cloudProvider === "perplexity"
+						? this.settings.perplexityToken
+						: this.settings.openAiToken,
 					this.settings.preferredMentorId,
-					this.settings.model,
+					this.settings.cloudProvider === "perplexity"
+						? this.settings.perplexityModel
+						: this.settings.openAiModel,
 					this.settings.language
 				)
 		)
@@ -71,8 +82,13 @@ export default class ObsidianMentor extends Plugin {
 		const alfred = new MentorModel(
 			"default",
 			Individuals["default"],
-			this.settings.model,
-			this.settings.token,
+			this.settings.cloudProvider,
+			this.settings.cloudProvider === "perplexity"
+				? this.settings.perplexityModel
+				: this.settings.openAiModel,
+			this.settings.cloudProvider === "perplexity"
+				? this.settings.perplexityToken
+				: this.settings.openAiToken,
 			this.settings.language
 		)
 		// This adds the "ELI5" command.

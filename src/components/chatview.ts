@@ -27,6 +27,7 @@ export class ChatView extends ItemView {
 
 	constructor(
 		leaf: WorkspaceLeaf,
+		cloudProvider: string,
 		token: string,
 		preferredMentorId: string,
 		model: ModelType,
@@ -42,6 +43,7 @@ export class ChatView extends ItemView {
 		this.mentor = new MentorModel(
 			preferredMentorId,
 			selectedMentor,
+			cloudProvider,
 			this.model,
 			token,
 			preferredLanguage

@@ -8,9 +8,25 @@ import { Individuals, Topics } from "./mentors"
 import { Mentor, Message, supportedLanguage } from "../types"
 
 export enum ModelType {
-	Default = "gpt-4-1106-preview",
+	// Perplexity models
+	PerplexityDefault = "mixtral-8x7b-instruct",
+	Mixtral8x7bInstruct = "mixtral-8x7b-instruct",
+	Codellama = "codellama-34b-instruct",
+	Llama270bChat = "llama-2-70b-chat",
+	pplx7bChat = "pplx-7b-chat",
+	pplx70bChat = "pplx-70b-chat",
+	pplx7bOnline = "pplx-7b-online",
+	pplx70bOnline = "pplx-70b-online",
+
+	// OpenAI models
+	OpenAiDefault = "gpt-4-1106-preview",
 	GPT4 = "gpt-4",
 	GPT432k = "gpt-4-32k",
+}
+
+enum ApiUrl {
+	perplexity = `https://api.perplexity.ai/chat/completions`,
+	openai = `https://api.openai.com/v1/chat/completions`,
 }
 
 export interface GPTSettings {
@@ -27,12 +43,12 @@ export const defaultSettings: GPTSettings = {
 	temperature: 1.0,
 	topP: 1.0,
 	presencePenalty: 0,
-	frequencyPenalty: 0,
+	frequencyPenalty: 1.0,
 	stop: [],
 }
 
 export class MentorModel {
-	apiUrl = `https://api.openai.com/v1/chat/completions`
+	apiUrl: String
 
 	id: string
 	mentor: Mentor
@@ -51,6 +67,7 @@ export class MentorModel {
 	constructor(
 		id: string,
 		mentor: Mentor,
+		cloudProvider: string,
 		model: ModelType,
 		apiKey: string,
 		preferredLanguage: supportedLanguage,
@@ -58,6 +75,8 @@ export class MentorModel {
 	) {
 		this.id = id
 		this.mentor = mentor
+
+		this.apiUrl = ApiUrl[cloudProvider]
 
 		this.model = model
 
@@ -73,6 +92,7 @@ export class MentorModel {
 		this.headers = {
 			Authorization: `Bearer ${this.apiKey}`,
 			"Content-Type": "application/json",
+			Accept: "application/json",
 		}
 	}
 
@@ -81,12 +101,12 @@ export class MentorModel {
 
 		// Check that API Key is set
 		if (!this.apiKey) {
-			return "Please set your OpenAI API key in the settings."
+			return "Please set your API key in the settings."
 		}
 
 		// Check that the model is set
 		if (!this.model) {
-			return "Please set your OpenAI model in the settings."
+			return "Please set your model in the settings."
 		}
 
 		// Check that the message is not empty
@@ -97,7 +117,7 @@ export class MentorModel {
 		const messages = [...this.history, { role: "user", content: message }]
 
 		const body = {
-			messages,
+			messages: messages,
 			model: this.model,
 			...pythonifyKeys(params),
 			stop: params.stop.length > 0 ? params.stop : undefined,
@@ -105,12 +125,12 @@ export class MentorModel {
 		}
 
 		const headers = this.headers
-		const requestUrlParam: RequestUrlParam = {
+		const requestUrlParam = {
 			url: this.apiUrl,
 			method: "POST",
+			headers: this.headers,
 			contentType: "application/json",
 			body: JSON.stringify(body),
-			headers,
 		}
 
 		this.history.push({ role: "user", content: message })
@@ -127,7 +147,7 @@ export class MentorModel {
 			.catch((err) => {
 				console.error(err)
 
-				return "I got an error when trying to reply."
+				return `I got an error when trying to reply. The error is: ${err.message}`
 			})
 
 		return answer

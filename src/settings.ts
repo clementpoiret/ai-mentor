@@ -63,13 +63,76 @@ export default class SettingTab extends PluginSettingTab {
 			})
 
 		new Setting(containerEl)
+			.setName("Cloud Provider")
+			.setDesc("The cloud provider you'd like to use.")
+			.addDropdown((dropdown) => {
+				dropdown.addOption("perplexity", "Perplexity")
+				dropdown.addOption("openai", "OpenAI")
+
+				dropdown.setValue(
+					this.plugin.settings.cloudProvider || "perplexity"
+				)
+				dropdown.onChange((value) => {
+					this.plugin.settings.cloudProvider = value
+					this.plugin.saveSettings()
+				})
+			})
+
+		containerEl.createEl("h3", { text: "Perplexity settings" })
+
+		new Setting(containerEl)
+			.setName("Perplexity API Key")
+			.setDesc("The token generated in your Perplexity.AI dashboard.")
+			.addText((text: TextComponent) => {
+				text.setPlaceholder("Token")
+					.setValue(this.plugin.settings.perplexityToken || "")
+					.onChange((change) => {
+						this.plugin.settings.perplexityToken = change
+						this.plugin.saveSettings()
+					})
+			})
+			.addButton((button: ButtonComponent) => {
+				button.setButtonText("Generate token")
+				button.onClick((evt: MouseEvent) => {
+					window.open("https://www.perplexity.ai/settings/api")
+				})
+			})
+
+		new Setting(containerEl)
+			.setName("Preferred Model")
+			.setDesc("The model you want to use.")
+			.addDropdown((dropdown) => {
+				dropdown.addOption(
+					"mixtral-8x7b-instruct",
+					"Mixtral 8x7b Instruct"
+				)
+				dropdown.addOption("mixtral-7b-instruct", "Mixtral 7b Instruct")
+				dropdown.addOption("llama-2-70b-chat", "Llama 2 70b Chat")
+				dropdown.addOption("pplx-7b-chat", "Pplx 7b Chat")
+				dropdown.addOption("pplx-70b-chat", "Pplx 70b Chat")
+				dropdown.addOption("pplx-7b-online", "Pplx 7b Online")
+				dropdown.addOption("pplx-70b-online", "Pplx 70b Online")
+
+				dropdown.setValue(
+					this.plugin.settings.perplexityModel ||
+						"mixtral-8x7b-instruct"
+				)
+				dropdown.onChange((value) => {
+					this.plugin.settings.perplexityModel = value as ModelType
+					this.plugin.saveSettings()
+				})
+			})
+
+		containerEl.createEl("h3", { text: "OpenAI settings" })
+
+		new Setting(containerEl)
 			.setName("OpenAI API Key")
 			.setDesc("The token generated in your OpenAI dashboard.")
 			.addText((text: TextComponent) => {
 				text.setPlaceholder("Token")
-					.setValue(this.plugin.settings.token || "")
+					.setValue(this.plugin.settings.openAiToken || "")
 					.onChange((change) => {
-						this.plugin.settings.token = change
+						this.plugin.settings.openAiToken = change
 						this.plugin.saveSettings()
 					})
 			})
@@ -88,9 +151,11 @@ export default class SettingTab extends PluginSettingTab {
 				dropdown.addOption("gpt-4", "GPT-4")
 				dropdown.addOption("gpt-4-32k", "GPT-4 32k")
 
-				dropdown.setValue(this.plugin.settings.model || "gpt-3.5-turbo")
+				dropdown.setValue(
+					this.plugin.settings.openAiModel || "gpt-4-1106-preview"
+				)
 				dropdown.onChange((value) => {
-					this.plugin.settings.model = value as ModelType
+					this.plugin.settings.openAiModel = value as ModelType
 					this.plugin.saveSettings()
 				})
 			})
