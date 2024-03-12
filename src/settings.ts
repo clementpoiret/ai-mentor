@@ -54,7 +54,7 @@ export default class SettingTab extends PluginSettingTab {
 					dropdown.addOption(id, mentorList[id].name.en)
 				})
 				dropdown.setValue(
-					this.plugin.settings.preferredMentorId || "default"
+					this.plugin.settings.preferredMentorId || "default",
 				)
 				dropdown.onChange((value) => {
 					this.plugin.settings.preferredMentorId = value
@@ -70,7 +70,7 @@ export default class SettingTab extends PluginSettingTab {
 				dropdown.addOption("openai", "OpenAI")
 
 				dropdown.setValue(
-					this.plugin.settings.cloudProvider || "perplexity"
+					this.plugin.settings.cloudProvider || "perplexity",
 				)
 				dropdown.onChange((value) => {
 					this.plugin.settings.cloudProvider = value
@@ -104,18 +104,25 @@ export default class SettingTab extends PluginSettingTab {
 			.addDropdown((dropdown) => {
 				dropdown.addOption(
 					"mixtral-8x7b-instruct",
-					"Mixtral 8x7b Instruct"
+					"Mixtral 8x7b Instruct",
 				)
-				dropdown.addOption("mixtral-7b-instruct", "Mixtral 7b Instruct")
-				dropdown.addOption("llama-2-70b-chat", "Llama 2 70b Chat")
-				dropdown.addOption("pplx-7b-chat", "Pplx 7b Chat")
-				dropdown.addOption("pplx-70b-chat", "Pplx 70b Chat")
-				dropdown.addOption("pplx-7b-online", "Pplx 7b Online")
-				dropdown.addOption("pplx-70b-online", "Pplx 70b Online")
+				dropdown.addOption("mistral-7b-instruct", "Mistral 7b Instruct")
+				dropdown.addOption(
+					"mixtral-8x7b-instruct",
+					"Mixtral 8x7b Instruct",
+				)
+				dropdown.addOption(
+					"codellama-34b-instruct",
+					"Codellama 34b Instruct",
+				)
+				dropdown.addOption("sonar-small-chat", "Sonar Small Chat")
+				dropdown.addOption("sonar-small-online", "Sonar Small Online")
+				dropdown.addOption("sonar-medium-chat", "Sonar Medium Chat")
+				dropdown.addOption("sonar-medium-online", "Sonar Medium Online")
 
 				dropdown.setValue(
 					this.plugin.settings.perplexityModel ||
-						"mixtral-8x7b-instruct"
+						"mixtral-8x7b-instruct",
 				)
 				dropdown.onChange((value) => {
 					this.plugin.settings.perplexityModel = value as ModelType
@@ -147,12 +154,12 @@ export default class SettingTab extends PluginSettingTab {
 			.setName("Preferred Model")
 			.setDesc("The model you want to use.")
 			.addDropdown((dropdown) => {
-				dropdown.addOption("gpt-4-1106-preview", "GPT-4 Turbo")
+				dropdown.addOption("gpt-4-turbp-preview", "GPT-4 Turbo")
 				dropdown.addOption("gpt-4", "GPT-4")
 				dropdown.addOption("gpt-4-32k", "GPT-4 32k")
 
 				dropdown.setValue(
-					this.plugin.settings.openAiModel || "gpt-4-1106-preview"
+					this.plugin.settings.openAiModel || "gpt-4-1106-preview",
 				)
 				dropdown.onChange((value) => {
 					this.plugin.settings.openAiModel = value as ModelType
