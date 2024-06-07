@@ -103,26 +103,29 @@ export default class SettingTab extends PluginSettingTab {
 			.setDesc("The model you want to use.")
 			.addDropdown((dropdown) => {
 				dropdown.addOption(
-					"mixtral-8x7b-instruct",
-					"Mixtral 8x7b Instruct",
+					"llama-3-sonar-small-32k-chat",
+					"Sonar Small Chat",
 				)
-				dropdown.addOption("mistral-7b-instruct", "Mistral 7b Instruct")
+				dropdown.addOption(
+					"llama-3-sonar-small-32k-online",
+					"Sonar Small Online",
+				)
+				dropdown.addOption(
+					"llama-3-sonar-large-32k-chat",
+					"Sonar Large Chat",
+				)
+				dropdown.addOption(
+					"llama-3-sonar-large-32k-online",
+					"Sonar Large Online",
+				)
 				dropdown.addOption(
 					"mixtral-8x7b-instruct",
 					"Mixtral 8x7b Instruct",
 				)
-				dropdown.addOption(
-					"codellama-34b-instruct",
-					"Codellama 34b Instruct",
-				)
-				dropdown.addOption("sonar-small-chat", "Sonar Small Chat")
-				dropdown.addOption("sonar-small-online", "Sonar Small Online")
-				dropdown.addOption("sonar-medium-chat", "Sonar Medium Chat")
-				dropdown.addOption("sonar-medium-online", "Sonar Medium Online")
 
 				dropdown.setValue(
 					this.plugin.settings.perplexityModel ||
-						"mixtral-8x7b-instruct",
+						"llama-3-sonar-large-32k-online",
 				)
 				dropdown.onChange((value) => {
 					this.plugin.settings.perplexityModel = value as ModelType
@@ -154,13 +157,11 @@ export default class SettingTab extends PluginSettingTab {
 			.setName("Preferred Model")
 			.setDesc("The model you want to use.")
 			.addDropdown((dropdown) => {
-				dropdown.addOption("gpt-4-turbp-preview", "GPT-4 Turbo")
-				dropdown.addOption("gpt-4", "GPT-4")
-				dropdown.addOption("gpt-4-32k", "GPT-4 32k")
+				dropdown.addOption("gpt-3.5-turbo", "GPT-3.5 Turbo")
+				dropdown.addOption("gpt-4-turbo", "GPT-4 Turbo")
+				dropdown.addOption("gpt-4o", "GPT-4o")
 
-				dropdown.setValue(
-					this.plugin.settings.openAiModel || "gpt-4-1106-preview",
-				)
+				dropdown.setValue(this.plugin.settings.openAiModel || "gpt-4o")
 				dropdown.onChange((value) => {
 					this.plugin.settings.openAiModel = value as ModelType
 					this.plugin.saveSettings()
