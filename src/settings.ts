@@ -103,26 +103,29 @@ export default class SettingTab extends PluginSettingTab {
 			.setDesc("The model you want to use.")
 			.addDropdown((dropdown) => {
 				dropdown.addOption(
-					"mixtral-8x7b-instruct",
-					"Mixtral 8x7b Instruct",
+					"llama-3-sonar-small-32k-chat",
+					"Sonar Small Chat",
 				)
-				dropdown.addOption("mistral-7b-instruct", "Mistral 7b Instruct")
+				dropdown.addOption(
+					"llama-3-sonar-small-32k-online",
+					"Sonar Small Online",
+				)
+				dropdown.addOption(
+					"llama-3-sonar-large-32k-chat",
+					"Sonar Large Chat",
+				)
+				dropdown.addOption(
+					"llama-3-sonar-large-32k-online",
+					"Sonar Large Online",
+				)
 				dropdown.addOption(
 					"mixtral-8x7b-instruct",
 					"Mixtral 8x7b Instruct",
 				)
-				dropdown.addOption(
-					"codellama-34b-instruct",
-					"Codellama 34b Instruct",
-				)
-				dropdown.addOption("sonar-small-chat", "Sonar Small Chat")
-				dropdown.addOption("sonar-small-online", "Sonar Small Online")
-				dropdown.addOption("sonar-medium-chat", "Sonar Medium Chat")
-				dropdown.addOption("sonar-medium-online", "Sonar Medium Online")
 
 				dropdown.setValue(
 					this.plugin.settings.perplexityModel ||
-						"mixtral-8x7b-instruct",
+						"llama-3-sonar-large-32k-online",
 				)
 				dropdown.onChange((value) => {
 					this.plugin.settings.perplexityModel = value as ModelType

@@ -9,14 +9,12 @@ import { Mentor, Message, supportedLanguage } from "../types"
 
 export enum ModelType {
 	// Perplexity models
-	PerplexityDefault = "sonar-medium-online",
-	Mistral7bInstruct = "mistral-7b-instruct",
+	PerplexityDefault = "llama-3-sonar-large-32k-online",
+	SonarSmallChat = "llama-3-sonar-small-32k-chat",
+	SonarLargeChat = "llama-3-sonar-large-32k-chat",
+	SonarSmallOnline = "llama-3-sonar-small-32k-online",
+	SonarLargeOnline = "llama-3-sonar-large-32k-online",
 	Mixtral8x7bInstruct = "mixtral-8x7b-instruct",
-	Codellama = "codellama-34b-instruct",
-	SonarSmallChat = "sonar-small-chat",
-	SonarSmallOnline = "sonar-small-online",
-	SonarMediumChat = "sonar-medium-chat",
-	SonarMediumOnline = "sonar-medium-online",
 
 	// OpenAI models
 	OpenAiDefault = "gpt-4o",
