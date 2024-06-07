@@ -19,9 +19,10 @@ export enum ModelType {
 	SonarMediumOnline = "sonar-medium-online",
 
 	// OpenAI models
-	OpenAiDefault = "gpt-4-turbo-preview",
+	OpenAiDefault = "gpt-4o",
+	GPT35Turbo = "gpt-3.5-turbo",
 	GPT4Turbo = "gpt-4-turbo",
-	GPT4 = "gpt-4",
+	GPT4o = "gpt-4o",
 }
 
 enum ApiUrl {
@@ -71,7 +72,7 @@ export class MentorModel {
 		model: ModelType,
 		apiKey: string,
 		preferredLanguage: supportedLanguage,
-		suffix?: string
+		suffix?: string,
 	) {
 		this.id = id
 		this.mentor = mentor

@@ -154,13 +154,11 @@ export default class SettingTab extends PluginSettingTab {
 			.setName("Preferred Model")
 			.setDesc("The model you want to use.")
 			.addDropdown((dropdown) => {
-				dropdown.addOption("gpt-4-turbp-preview", "GPT-4 Turbo")
-				dropdown.addOption("gpt-4", "GPT-4")
-				dropdown.addOption("gpt-4-32k", "GPT-4 32k")
+				dropdown.addOption("gpt-3.5-turbo", "GPT-3.5 Turbo")
+				dropdown.addOption("gpt-4-turbo", "GPT-4 Turbo")
+				dropdown.addOption("gpt-4o", "GPT-4o")
 
-				dropdown.setValue(
-					this.plugin.settings.openAiModel || "gpt-4-1106-preview",
-				)
+				dropdown.setValue(this.plugin.settings.openAiModel || "gpt-4o")
 				dropdown.onChange((value) => {
 					this.plugin.settings.openAiModel = value as ModelType
 					this.plugin.saveSettings()
