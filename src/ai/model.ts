@@ -1,11 +1,12 @@
 // Inspired by `https://github.com/jmilldotdev/obsidian-gpt/blob/main/src/models/chatGPT.ts`
+// TODO: REFACTOR STR REPLACER
 
 import { RequestUrlParam, request } from "obsidian"
 import { pythonifyKeys } from "src/utils"
 
 import { Command } from "./commands"
 import { Individuals, Topics } from "./mentors"
-import { Mentor, Message, supportedLanguage } from "../types"
+import { Mentor, Message } from "../types"
 
 export enum ModelType {
 	// Perplexity models
@@ -55,7 +56,8 @@ export class MentorModel {
 	model: ModelType
 
 	apiKey: string
-	preferredLanguage: supportedLanguage
+	// TODO: IMPLEMENT
+	preferredLanguage: string
 
 	history: Message[]
 
@@ -69,7 +71,6 @@ export class MentorModel {
 		cloudProvider: string,
 		model: ModelType,
 		apiKey: string,
-		preferredLanguage: supportedLanguage,
 		suffix?: string,
 	) {
 		this.id = id
@@ -78,13 +79,14 @@ export class MentorModel {
 		this.apiUrl =
 			cloudProvider === "perplexity" ? ApiUrl.perplexity : ApiUrl.openai
 
+		this.preferredLanguage = "french"
+
 		this.model = model
 
 		this.apiKey = apiKey
-		this.preferredLanguage = preferredLanguage
 
 		this.history = [
-			{ role: "system", content: mentor.systemPrompt[preferredLanguage] },
+			{ role: "system", content: mentor.systemPrompt.replace("$LANGUAGE", this.preferredLanguage) },
 		]
 
 		this.suffix = suffix
@@ -160,16 +162,20 @@ export class MentorModel {
 			...Individuals,
 		}
 		const requestedMentor = mentorList[command.mentor]
+		const specificSystemPrompt: Message = {
+			"role": "system",
+			"content": command.prompt.content.replace("$LANGUAGE", this.preferredLanguage)
+		}
 		const prompts = command.pattern.map((prompt) => {
-			return prompt[this.preferredLanguage].replace("*", text)
+			return prompt.replace("$TEXT", text).replace("$LANGUAGE", this.preferredLanguage)
 		})
 
 		this.history = [
 			{
 				role: "system",
-				content: requestedMentor.systemPrompt[this.preferredLanguage],
+				content: requestedMentor.systemPrompt.replace("$LANGUAGE", this.preferredLanguage),
 			},
-			command.prompt[this.preferredLanguage],
+			specificSystemPrompt,
 		]
 		const answers: string[] = []
 
@@ -183,6 +189,7 @@ export class MentorModel {
 				stop: params.stop.length > 0 ? params.stop : undefined,
 				suffix: this.suffix,
 			}
+			console.log(body)
 
 			const headers = this.headers
 			const requestUrlParam: RequestUrlParam = {
@@ -219,7 +226,7 @@ export class MentorModel {
 		this.history = [
 			{
 				role: "system",
-				content: newMentor.systemPrompt[this.preferredLanguage],
+				content: newMentor.systemPrompt.replace("$LANGUAGE", this.preferredLanguage),
 			},
 		]
 	}
@@ -228,7 +235,7 @@ export class MentorModel {
 		this.history = [
 			{
 				role: "system",
-				content: this.mentor.systemPrompt[this.preferredLanguage],
+				content: this.mentor.systemPrompt.replace("$LANGUAGE", this.preferredLanguage),
 			},
 		]
 	}

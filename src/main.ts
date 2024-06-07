@@ -7,11 +7,13 @@ import { MentorIcon } from "./assets/icons/mentor"
 import { ChatView, VIEW_TYPE_CHAT } from "./components/chatview"
 import { MentorModal } from "./components/modals"
 import SettingTab from "./settings"
-import { supportedLanguage } from "./types"
+//import { supportedLanguage } from "./types"
+
+// TODO: REVIEW THE USE OF LANGUAGES HERE
 
 interface MentorSettings {
 	preferredMentorId: string
-	language: supportedLanguage
+	//language: supportedLanguage
 	perplexityToken: string
 	perplexityModel: string
 	openAiToken: string
@@ -21,7 +23,7 @@ interface MentorSettings {
 
 const DEFAULT_SETTINGS: MentorSettings = {
 	preferredMentorId: "default",
-	language: "en",
+	//language: "en",
 	perplexityToken: "",
 	perplexityModel: ModelType.PerplexityDefault,
 	openAiToken: "",
@@ -48,7 +50,7 @@ export default class ObsidianMentor extends Plugin {
 					this.settings.cloudProvider === "perplexity"
 						? (this.settings.perplexityModel as ModelType)
 						: (this.settings.openAiModel as ModelType),
-					this.settings.language
+					//this.settings.language
 				)
 		)
 
@@ -89,7 +91,7 @@ export default class ObsidianMentor extends Plugin {
 			this.settings.cloudProvider === "perplexity"
 				? (this.settings.perplexityToken as ModelType)
 				: (this.settings.openAiToken as ModelType),
-			this.settings.language
+			//this.settings.language
 		)
 		// This adds the "ELI5" command.
 		this.addCommand({
