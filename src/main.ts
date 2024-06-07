@@ -365,7 +365,7 @@ export default class ObsidianMentor extends Plugin {
 		// Pass token from settings to the view
 		this.app.workspace.detachLeavesOfType(VIEW_TYPE_CHAT)
 
-		await this.app.workspace.getRightLeaf(false).setViewState({
+		await this.app.workspace.getRightLeaf(false)!.setViewState({
 			type: VIEW_TYPE_CHAT,
 			active: true,
 		})
