@@ -7,6 +7,7 @@ import { pythonifyKeys } from "src/utils"
 import { Command } from "./commands"
 import { Individuals, Topics } from "./mentors"
 import { Mentor, Message } from "../types"
+import { supportedLanguages } from "src/languages"
 
 export enum ModelType {
 	// Perplexity models
@@ -57,7 +58,7 @@ export class MentorModel {
 
 	apiKey: string
 	// TODO: IMPLEMENT
-	preferredLanguage: string
+	language: keyof typeof supportedLanguages
 
 	history: Message[]
 
@@ -71,6 +72,7 @@ export class MentorModel {
 		cloudProvider: string,
 		model: ModelType,
 		apiKey: string,
+		language: keyof typeof supportedLanguages,
 		suffix?: string,
 	) {
 		this.id = id
@@ -79,14 +81,14 @@ export class MentorModel {
 		this.apiUrl =
 			cloudProvider === "perplexity" ? ApiUrl.perplexity : ApiUrl.openai
 
-		this.preferredLanguage = "french"
+		this.language = language
 
 		this.model = model
 
 		this.apiKey = apiKey
 
 		this.history = [
-			{ role: "system", content: mentor.systemPrompt.replace("$LANGUAGE", this.preferredLanguage) },
+			{ role: "system", content: mentor.systemPrompt.replace("$LANGUAGE", supportedLanguages[this.language]) },
 		]
 
 		this.suffix = suffix
@@ -164,16 +166,16 @@ export class MentorModel {
 		const requestedMentor = mentorList[command.mentor]
 		const specificSystemPrompt: Message = {
 			"role": "system",
-			"content": command.prompt.content.replace("$LANGUAGE", this.preferredLanguage)
+			"content": command.prompt.content.replace("$LANGUAGE", supportedLanguages[this.language])
 		}
 		const prompts = command.pattern.map((prompt) => {
-			return prompt.replace("$TEXT", text).replace("$LANGUAGE", this.preferredLanguage)
+			return prompt.replace("$TEXT", text).replace("$LANGUAGE", supportedLanguages[this.language])
 		})
 
 		this.history = [
 			{
 				role: "system",
-				content: requestedMentor.systemPrompt.replace("$LANGUAGE", this.preferredLanguage),
+				content: requestedMentor.systemPrompt.replace("$LANGUAGE", supportedLanguages[this.language]),
 			},
 			specificSystemPrompt,
 		]
@@ -226,7 +228,7 @@ export class MentorModel {
 		this.history = [
 			{
 				role: "system",
-				content: newMentor.systemPrompt.replace("$LANGUAGE", this.preferredLanguage),
+				content: newMentor.systemPrompt.replace("$LANGUAGE", supportedLanguages[this.language]),
 			},
 		]
 	}
@@ -235,7 +237,7 @@ export class MentorModel {
 		this.history = [
 			{
 				role: "system",
-				content: this.mentor.systemPrompt.replace("$LANGUAGE", this.preferredLanguage),
+				content: this.mentor.systemPrompt.replace("$LANGUAGE", supportedLanguages[this.language]),
 			},
 		]
 	}

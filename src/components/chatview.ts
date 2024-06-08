@@ -6,13 +6,14 @@ import { CleanIcon } from "../assets/icons/clean"
 import { CopyIcon } from "../assets/icons/copy"
 import { SendIcon } from "../assets/icons/send"
 import { Mentor, Message } from "../types"
+import { supportedLanguages } from "../languages"
 
 export const VIEW_TYPE_CHAT = "mentor-chat-view"
 
 export class ChatView extends ItemView {
 	preferredMentorId = "default"
 	// TODO: IMPLEMENT
-	preferredLanguage = "english"
+	language: keyof typeof supportedLanguages = "en"
 	model: ModelType
 	firstOpen = true
 	// isTyping = false
@@ -32,10 +33,12 @@ export class ChatView extends ItemView {
 		token: string,
 		preferredMentorId: string,
 		model: string,
+		language: keyof typeof supportedLanguages,
 	) {
 		super(leaf)
 		this.preferredMentorId = preferredMentorId
 		this.model = model as ModelType
+		this.language = language
 
 		// Mentor selection.
 		const selectedMentor = this.mentorList[preferredMentorId]
@@ -45,6 +48,7 @@ export class ChatView extends ItemView {
 			cloudProvider,
 			this.model,
 			token,
+			this.language,
 		)
 	}
 
