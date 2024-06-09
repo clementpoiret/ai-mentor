@@ -1,5 +1,4 @@
 // Inspired by `https://github.com/jmilldotdev/obsidian-gpt/blob/main/src/models/chatGPT.ts`
-// TODO: REFACTOR STR REPLACER
 
 import { RequestUrlParam, request } from "obsidian"
 import { pythonifyKeys } from "src/utils"
@@ -7,7 +6,8 @@ import { pythonifyKeys } from "src/utils"
 import { Command } from "./commands"
 import { Individuals, Topics } from "./mentors"
 import { Mentor, Message } from "../types"
-import { supportedLanguages } from "src/languages"
+import { supportedLanguages } from "../languages"
+import { complete } from "../utils"
 
 export enum ModelType {
 	// Perplexity models
@@ -88,7 +88,7 @@ export class MentorModel {
 		this.apiKey = apiKey
 
 		this.history = [
-			{ role: "system", content: mentor.systemPrompt.replace("$LANGUAGE", supportedLanguages[this.language]) },
+			{ role: "system", content: complete(mentor.systemPrompt, supportedLanguages[this.language]) },
 		]
 
 		this.suffix = suffix
@@ -127,8 +127,8 @@ export class MentorModel {
 			stop: params.stop.length > 0 ? params.stop : undefined,
 			suffix: this.suffix,
 		}
+		console.log(body)
 
-		const headers = this.headers
 		const requestUrlParam = {
 			url: this.apiUrl,
 			method: "POST",
@@ -164,20 +164,19 @@ export class MentorModel {
 			...Individuals,
 		}
 		const requestedMentor = mentorList[command.mentor]
-		const specificSystemPrompt: Message = {
-			"role": "system",
-			"content": command.prompt.content.replace("$LANGUAGE", supportedLanguages[this.language])
-		}
+		const systemPrompt = requestedMentor.systemPrompt.concat("\n",
+			command.prompt.content
+		)
+
 		const prompts = command.pattern.map((prompt) => {
-			return prompt.replace("$TEXT", text).replace("$LANGUAGE", supportedLanguages[this.language])
+			return complete(prompt, supportedLanguages[this.language], text)
 		})
 
 		this.history = [
 			{
 				role: "system",
-				content: requestedMentor.systemPrompt.replace("$LANGUAGE", supportedLanguages[this.language]),
+				content: complete(systemPrompt, supportedLanguages[this.language]),
 			},
-			specificSystemPrompt,
 		]
 		const answers: string[] = []
 
@@ -228,7 +227,7 @@ export class MentorModel {
 		this.history = [
 			{
 				role: "system",
-				content: newMentor.systemPrompt.replace("$LANGUAGE", supportedLanguages[this.language]),
+				content: complete(newMentor.systemPrompt, supportedLanguages[this.language]),
 			},
 		]
 	}
@@ -237,7 +236,7 @@ export class MentorModel {
 		this.history = [
 			{
 				role: "system",
-				content: this.mentor.systemPrompt.replace("$LANGUAGE", supportedLanguages[this.language]),
+				content: complete(this.mentor.systemPrompt, supportedLanguages[this.language]),
 			},
 		]
 	}

@@ -281,7 +281,7 @@ export class ChatView extends ItemView {
 
 		// Refresh the view.
 		await this.onOpen()
-
+	
 		this.mentor
 			.getCompletion(prompt)
 			.then(async (response) => {

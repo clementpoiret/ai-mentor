@@ -12,7 +12,6 @@ import ObsidianMentor from "./main"
 import { Mentor } from "./types"
 import { supportedLanguages } from "./languages"
 import { capitalize } from "./utils"
-// TODO: CREATE A RECORD OF SUPPORTED LANGUAGES
 
 export default class SettingTab extends PluginSettingTab {
 	plugin: ObsidianMentor
