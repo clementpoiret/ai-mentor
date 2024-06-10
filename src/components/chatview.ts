@@ -8,11 +8,12 @@ import { SendIcon } from "../assets/icons/send"
 import { Mentor, Message } from "../types"
 import { supportedLanguages } from "../languages"
 
+const introducer = "[ai-mentor] Feel free to send your first message to your mentor. FYI: `online` models are really good at question-answering and follow-up, but can hallucinate for small-talks, where `chat` models are better."
+
 export const VIEW_TYPE_CHAT = "mentor-chat-view"
 
 export class ChatView extends ItemView {
 	preferredMentorId = "default"
-	// TODO: IMPLEMENT
 	language: keyof typeof supportedLanguages = "en"
 	model: ModelType
 	firstOpen = true
@@ -224,8 +225,7 @@ export class ChatView extends ItemView {
 		this.displayedMessages = [
 			{
 				role: "assistant",
-				// TODO: IMPLEMENT
-				content: "Hi, how can I help you?",
+				content: introducer,
 			},
 		]
 
@@ -324,8 +324,7 @@ export class ChatView extends ItemView {
 		this.displayedMessages = [
 			{
 				role: "assistant",
-				// TODO: IMPLEMENT
-				content: "Hi, how can I help you?"
+				content: introducer
 			},
 		]
 

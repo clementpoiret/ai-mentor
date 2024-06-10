@@ -57,7 +57,7 @@ export class MentorModel {
 	model: ModelType
 
 	apiKey: string
-	// TODO: IMPLEMENT
+
 	language: keyof typeof supportedLanguages
 
 	history: Message[]
