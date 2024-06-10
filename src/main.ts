@@ -7,11 +7,13 @@ import { MentorIcon } from "./assets/icons/mentor"
 import { ChatView, VIEW_TYPE_CHAT } from "./components/chatview"
 import { MentorModal } from "./components/modals"
 import SettingTab from "./settings"
-import { supportedLanguage } from "./types"
+import { supportedLanguages } from "./languages"
+
+// TODO: REVIEW THE USE OF LANGUAGES HERE
 
 interface MentorSettings {
 	preferredMentorId: string
-	language: supportedLanguage
+	language: keyof typeof supportedLanguages
 	perplexityToken: string
 	perplexityModel: string
 	openAiToken: string

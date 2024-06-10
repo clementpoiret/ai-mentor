@@ -9,7 +9,9 @@ import {
 import { Topics, Individuals } from "./ai/mentors"
 import { ModelType } from "./ai/model"
 import ObsidianMentor from "./main"
-import { Mentor, supportedLanguage } from "./types"
+import { Mentor } from "./types"
+import { supportedLanguages } from "./languages"
+import { capitalize } from "./utils"
 
 export default class SettingTab extends PluginSettingTab {
 	plugin: ObsidianMentor
@@ -36,22 +38,24 @@ export default class SettingTab extends PluginSettingTab {
 			.setName("Language")
 			.setDesc("The language you'd like to talk to your mentor in.")
 			.addDropdown((dropdown) => {
-				dropdown.addOption("en", "English")
-				dropdown.addOption("fr", "Français")
+				Object.entries(supportedLanguages).forEach(([code, name]) => {
+				  dropdown.addOption(code, capitalize(name));
+				});
 
-				dropdown.setValue(this.plugin.settings.language || "en")
-				dropdown.onChange((value) => {
-					this.plugin.settings.language = value as supportedLanguage
-					this.plugin.saveSettings()
-				})
-			})
+			dropdown.setValue(this.plugin.settings.language || "en");
+    
+			dropdown.onChange((value) => {
+			  this.plugin.settings.language = value as keyof typeof supportedLanguages;
+			  this.plugin.saveSettings();
+			});
+		  });
 
 		new Setting(containerEl)
 			.setName("Preferred Mentor")
 			.setDesc("The mentor you'd like to talk to in priority.")
 			.addDropdown((dropdown) => {
 				mentorIds.forEach((id) => {
-					dropdown.addOption(id, mentorList[id].name.en)
+					dropdown.addOption(id, mentorList[id].name)
 				})
 				dropdown.setValue(
 					this.plugin.settings.preferredMentorId || "default",

@@ -1,0 +1,22 @@
+export const supportedLanguages = {
+  "en": "english",
+  "zh": "mandarin chinese", 
+  "hi": "hindi",
+  "es": "spanish",
+  "fr": "french",
+  "ar": "arabic",
+  "bn": "bengali",
+  "pt": "portuguese",
+  "ru": "russian",
+  "ur": "urdu",
+  "id": "indonesian",
+  "de": "german",
+  "ja": "japanese",
+  "mr": "marathi",
+  "te": "telugu",
+  "tr": "turkish",
+  "ko": "korean",
+  "vi": "vietnamese",
+  "ta": "tamil",
+  "it": "italian"
+};

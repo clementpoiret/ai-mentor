@@ -5,13 +5,15 @@ import { MentorModel, ModelType } from "../ai/model"
 import { CleanIcon } from "../assets/icons/clean"
 import { CopyIcon } from "../assets/icons/copy"
 import { SendIcon } from "../assets/icons/send"
-import { Mentor, Message, supportedLanguage } from "../types"
+import { Mentor, Message } from "../types"
+import { supportedLanguages } from "../languages"
 
 export const VIEW_TYPE_CHAT = "mentor-chat-view"
 
 export class ChatView extends ItemView {
 	preferredMentorId = "default"
-	preferredLanguage = "en"
+	// TODO: IMPLEMENT
+	language: keyof typeof supportedLanguages = "en"
 	model: ModelType
 	firstOpen = true
 	// isTyping = false
@@ -31,12 +33,12 @@ export class ChatView extends ItemView {
 		token: string,
 		preferredMentorId: string,
 		model: string,
-		preferredLanguage: supportedLanguage
+		language: keyof typeof supportedLanguages,
 	) {
 		super(leaf)
 		this.preferredMentorId = preferredMentorId
-		this.preferredLanguage = preferredLanguage
 		this.model = model as ModelType
+		this.language = language
 
 		// Mentor selection.
 		const selectedMentor = this.mentorList[preferredMentorId]
@@ -46,7 +48,7 @@ export class ChatView extends ItemView {
 			cloudProvider,
 			this.model,
 			token,
-			preferredLanguage
+			this.language,
 		)
 	}
 
@@ -99,13 +101,13 @@ export class ChatView extends ItemView {
 		for (const mentor of Object.entries(Topics)) {
 			const optionEl = topicsGroup.createEl("option")
 			optionEl.value = mentor[0]
-			optionEl.text = mentor[1].name[this.preferredLanguage]
+			optionEl.text = mentor[1].name
 		}
 
 		for (const mentor of Object.entries(Individuals)) {
 			const optionEl = individualsGroup.createEl("option")
 			optionEl.value = mentor[0]
-			optionEl.text = mentor[1].name[this.preferredLanguage]
+			optionEl.text = mentor[1].name
 		}
 
 		selectEl.onchange = (evt) => {
@@ -222,7 +224,8 @@ export class ChatView extends ItemView {
 		this.displayedMessages = [
 			{
 				role: "assistant",
-				content: newMentor.firstMessage[this.preferredLanguage],
+				// TODO: IMPLEMENT
+				content: "Hi, how can I help you?",
 			},
 		]
 
@@ -278,7 +281,7 @@ export class ChatView extends ItemView {
 
 		// Refresh the view.
 		await this.onOpen()
-
+	
 		this.mentor
 			.getCompletion(prompt)
 			.then(async (response) => {
@@ -321,8 +324,8 @@ export class ChatView extends ItemView {
 		this.displayedMessages = [
 			{
 				role: "assistant",
-				content:
-					this.mentor.mentor.firstMessage[this.preferredLanguage],
+				// TODO: IMPLEMENT
+				content: "Hi, how can I help you?"
 			},
 		]
 

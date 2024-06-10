@@ -5,7 +5,9 @@ import { pythonifyKeys } from "src/utils"
 
 import { Command } from "./commands"
 import { Individuals, Topics } from "./mentors"
-import { Mentor, Message, supportedLanguage } from "../types"
+import { Mentor, Message } from "../types"
+import { supportedLanguages } from "../languages"
+import { complete } from "../utils"
 
 export enum ModelType {
 	// Perplexity models
@@ -55,7 +57,8 @@ export class MentorModel {
 	model: ModelType
 
 	apiKey: string
-	preferredLanguage: supportedLanguage
+	// TODO: IMPLEMENT
+	language: keyof typeof supportedLanguages
 
 	history: Message[]
 
@@ -69,7 +72,7 @@ export class MentorModel {
 		cloudProvider: string,
 		model: ModelType,
 		apiKey: string,
-		preferredLanguage: supportedLanguage,
+		language: keyof typeof supportedLanguages,
 		suffix?: string,
 	) {
 		this.id = id
@@ -78,13 +81,14 @@ export class MentorModel {
 		this.apiUrl =
 			cloudProvider === "perplexity" ? ApiUrl.perplexity : ApiUrl.openai
 
+		this.language = language
+
 		this.model = model
 
 		this.apiKey = apiKey
-		this.preferredLanguage = preferredLanguage
 
 		this.history = [
-			{ role: "system", content: mentor.systemPrompt[preferredLanguage] },
+			{ role: "system", content: complete(mentor.systemPrompt, supportedLanguages[this.language]) },
 		]
 
 		this.suffix = suffix
@@ -123,8 +127,8 @@ export class MentorModel {
 			stop: params.stop.length > 0 ? params.stop : undefined,
 			suffix: this.suffix,
 		}
+		console.log(body)
 
-		const headers = this.headers
 		const requestUrlParam = {
 			url: this.apiUrl,
 			method: "POST",
@@ -160,16 +164,19 @@ export class MentorModel {
 			...Individuals,
 		}
 		const requestedMentor = mentorList[command.mentor]
+		const systemPrompt = requestedMentor.systemPrompt.concat("\n",
+			command.prompt.content
+		)
+
 		const prompts = command.pattern.map((prompt) => {
-			return prompt[this.preferredLanguage].replace("*", text)
+			return complete(prompt, supportedLanguages[this.language], text)
 		})
 
 		this.history = [
 			{
 				role: "system",
-				content: requestedMentor.systemPrompt[this.preferredLanguage],
+				content: complete(systemPrompt, supportedLanguages[this.language]),
 			},
-			command.prompt[this.preferredLanguage],
 		]
 		const answers: string[] = []
 
@@ -183,6 +190,7 @@ export class MentorModel {
 				stop: params.stop.length > 0 ? params.stop : undefined,
 				suffix: this.suffix,
 			}
+			console.log(body)
 
 			const headers = this.headers
 			const requestUrlParam: RequestUrlParam = {
@@ -219,7 +227,7 @@ export class MentorModel {
 		this.history = [
 			{
 				role: "system",
-				content: newMentor.systemPrompt[this.preferredLanguage],
+				content: complete(newMentor.systemPrompt, supportedLanguages[this.language]),
 			},
 		]
 	}
@@ -228,7 +236,7 @@ export class MentorModel {
 		this.history = [
 			{
 				role: "system",
-				content: this.mentor.systemPrompt[this.preferredLanguage],
+				content: complete(this.mentor.systemPrompt, supportedLanguages[this.language]),
 			},
 		]
 	}
