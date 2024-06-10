@@ -9,7 +9,6 @@ import { MentorModal } from "./components/modals"
 import SettingTab from "./settings"
 import { supportedLanguages } from "./languages"
 
-// TODO: REVIEW THE USE OF LANGUAGES HERE
 
 interface MentorSettings {
 	preferredMentorId: string
