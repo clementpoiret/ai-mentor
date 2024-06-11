@@ -1,7 +1,7 @@
 {
 	"id": "ai-mentor",
 	"name": "AI Mentor",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"minAppVersion": "0.15.0",
 	"description": "Meet your open source AI mentor in Obsidian. Ask questions, get answers, and learn new things.",
 	"author": "Clément POIRET",
