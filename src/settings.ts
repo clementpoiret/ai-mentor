@@ -39,16 +39,17 @@ export default class SettingTab extends PluginSettingTab {
 			.setDesc("The language you'd like to talk to your mentor in.")
 			.addDropdown((dropdown) => {
 				Object.entries(supportedLanguages).forEach(([code, name]) => {
-				  dropdown.addOption(code, capitalize(name));
-				});
+					dropdown.addOption(code, capitalize(name))
+				})
 
-			dropdown.setValue(this.plugin.settings.language || "en");
-    
-			dropdown.onChange((value) => {
-			  this.plugin.settings.language = value as keyof typeof supportedLanguages;
-			  this.plugin.saveSettings();
-			});
-		  });
+				dropdown.setValue(this.plugin.settings.language || "en")
+
+				dropdown.onChange((value) => {
+					this.plugin.settings.language =
+						value as keyof typeof supportedLanguages
+					this.plugin.saveSettings()
+				})
+			})
 
 		new Setting(containerEl)
 			.setName("Preferred Mentor")
@@ -107,29 +108,29 @@ export default class SettingTab extends PluginSettingTab {
 			.setDesc("The model you want to use.")
 			.addDropdown((dropdown) => {
 				dropdown.addOption(
-					"llama-3-sonar-small-32k-chat",
-					"Sonar Small Chat",
+					"llama-3.1-sonar-small-128k-chat",
+					"Sonar Small Chat (Llama 3.1 8B)",
 				)
 				dropdown.addOption(
-					"llama-3-sonar-small-32k-online",
-					"Sonar Small Online",
+					"llama-3.1-sonar-small-128k-online",
+					"Sonar Small Online (Llama 3.1 8B)",
 				)
 				dropdown.addOption(
-					"llama-3-sonar-large-32k-chat",
-					"Sonar Large Chat",
+					"llama-3.1-sonar-large-128k-chat",
+					"Sonar Large Chat (Llama 3.1 70B)",
 				)
 				dropdown.addOption(
-					"llama-3-sonar-large-32k-online",
-					"Sonar Large Online",
+					"llama-3.1-sonar-large-128k-online",
+					"Sonar Large Online (Llama 3.1 70B)",
 				)
 				dropdown.addOption(
-					"mixtral-8x7b-instruct",
-					"Mixtral 8x7b Instruct",
+					"llama-3.1-sonar-huge-128k-online",
+					"Sonar Huge Online (Llama 3.1 405B)",
 				)
 
 				dropdown.setValue(
 					this.plugin.settings.perplexityModel ||
-						"llama-3-sonar-large-32k-online",
+						"llama-3.1-sonar-large-128k-online",
 				)
 				dropdown.onChange((value) => {
 					this.plugin.settings.perplexityModel = value as ModelType
@@ -164,6 +165,7 @@ export default class SettingTab extends PluginSettingTab {
 				dropdown.addOption("gpt-3.5-turbo", "GPT-3.5 Turbo")
 				dropdown.addOption("gpt-4-turbo", "GPT-4 Turbo")
 				dropdown.addOption("gpt-4o", "GPT-4o")
+				dropdown.addOption("gpt-4o-mini", "GPT-4o Mini")
 
 				dropdown.setValue(this.plugin.settings.openAiModel || "gpt-4o")
 				dropdown.onChange((value) => {

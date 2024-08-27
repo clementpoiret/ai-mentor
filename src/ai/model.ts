@@ -11,18 +11,19 @@ import { complete } from "../utils"
 
 export enum ModelType {
 	// Perplexity models
-	PerplexityDefault = "llama-3-sonar-large-32k-online",
-	SonarSmallChat = "llama-3-sonar-small-32k-chat",
-	SonarLargeChat = "llama-3-sonar-large-32k-chat",
-	SonarSmallOnline = "llama-3-sonar-small-32k-online",
-	SonarLargeOnline = "llama-3-sonar-large-32k-online",
-	Mixtral8x7bInstruct = "mixtral-8x7b-instruct",
+	PerplexityDefault = "llama-3.1-sonar-large-128k-online",
+	SonarSmallChat = "llama-3.1-sonar-small-128k-chat",
+	SonarLargeChat = "llama-3.1-sonar-large-128k-chat",
+	SonarSmallOnline = "llama-3.1-sonar-small-128k-online",
+	SonarLargeOnline = "llama-3.1-sonar-large-128k-online",
+	SonarHugeOnline = "llama-3.1-sonar-huge-128k-online",
 
 	// OpenAI models
 	OpenAiDefault = "gpt-4o",
 	GPT35Turbo = "gpt-3.5-turbo",
 	GPT4Turbo = "gpt-4-turbo",
 	GPT4o = "gpt-4o",
+	GPT4oMini = "gpt-4o-mini",
 }
 
 enum ApiUrl {
@@ -88,7 +89,13 @@ export class MentorModel {
 		this.apiKey = apiKey
 
 		this.history = [
-			{ role: "system", content: complete(mentor.systemPrompt, supportedLanguages[this.language]) },
+			{
+				role: "system",
+				content: complete(
+					mentor.systemPrompt,
+					supportedLanguages[this.language],
+				),
+			},
 		]
 
 		this.suffix = suffix
@@ -164,8 +171,9 @@ export class MentorModel {
 			...Individuals,
 		}
 		const requestedMentor = mentorList[command.mentor]
-		const systemPrompt = requestedMentor.systemPrompt.concat("\n",
-			command.prompt.content
+		const systemPrompt = requestedMentor.systemPrompt.concat(
+			"\n",
+			command.prompt.content,
 		)
 
 		const prompts = command.pattern.map((prompt) => {
@@ -175,7 +183,10 @@ export class MentorModel {
 		this.history = [
 			{
 				role: "system",
-				content: complete(systemPrompt, supportedLanguages[this.language]),
+				content: complete(
+					systemPrompt,
+					supportedLanguages[this.language],
+				),
 			},
 		]
 		const answers: string[] = []
@@ -227,7 +238,10 @@ export class MentorModel {
 		this.history = [
 			{
 				role: "system",
-				content: complete(newMentor.systemPrompt, supportedLanguages[this.language]),
+				content: complete(
+					newMentor.systemPrompt,
+					supportedLanguages[this.language],
+				),
 			},
 		]
 	}
@@ -236,7 +250,10 @@ export class MentorModel {
 		this.history = [
 			{
 				role: "system",
-				content: complete(this.mentor.systemPrompt, supportedLanguages[this.language]),
+				content: complete(
+					this.mentor.systemPrompt,
+					supportedLanguages[this.language],
+				),
 			},
 		]
 	}
