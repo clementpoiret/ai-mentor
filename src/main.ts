@@ -16,6 +16,7 @@ interface MentorSettings {
 	perplexityToken: string
 	perplexityModel: string
 	openAiToken: string
+	openAiCustomHost: string
 	openAiModel: string
 	cloudProvider: string
 }
@@ -26,6 +27,7 @@ const DEFAULT_SETTINGS: MentorSettings = {
 	perplexityToken: "",
 	perplexityModel: ModelType.PerplexityDefault,
 	openAiToken: "",
+	openAiCustomHost: "",
 	openAiModel: ModelType.OpenAiDefault,
 	cloudProvider: "perplexity",
 }
@@ -49,7 +51,8 @@ export default class ObsidianMentor extends Plugin {
 					this.settings.cloudProvider === "perplexity"
 						? (this.settings.perplexityModel as ModelType)
 						: (this.settings.openAiModel as ModelType),
-					this.settings.language
+					this.settings.language,
+					this.settings.openAiCustomHost
 				)
 		)
 
@@ -90,7 +93,8 @@ export default class ObsidianMentor extends Plugin {
 			this.settings.cloudProvider === "perplexity"
 				? (this.settings.perplexityToken as ModelType)
 				: (this.settings.openAiToken as ModelType),
-			this.settings.language
+			this.settings.language,
+			this.settings.openAiCustomHost
 		)
 		// This adds the "ELI5" command.
 		this.addCommand({

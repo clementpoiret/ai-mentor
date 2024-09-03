@@ -158,6 +158,18 @@ export default class SettingTab extends PluginSettingTab {
 				})
 			})
 
+			new Setting(containerEl)
+				.setName("Custom API Host")
+				.setDesc("Customizing the OpenAI API host. Restart to take effect")
+				.addText((text: TextComponent) => {
+					text.setPlaceholder("eg. https://api.openai.com/v1/chat/completions")
+						.setValue(this.plugin.settings.openAiCustomHost || "")
+						.onChange((change) => {
+							this.plugin.settings.openAiCustomHost = change
+							this.plugin.saveSettings()
+						})
+				})
+
 		new Setting(containerEl)
 			.setName("Preferred Model")
 			.setDesc("The model you want to use.")
