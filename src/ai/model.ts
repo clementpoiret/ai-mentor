@@ -74,15 +74,14 @@ export class MentorModel {
 		model: ModelType,
 		apiKey: string,
 		language: keyof typeof supportedLanguages,
-		customAPIHost : string,
+		customOpenAiAPIHost : string,
 		suffix?: string,
 	) {
 		this.id = id
 		this.mentor = mentor
 
 		this.apiUrl =
-			//cloudProvider === "perplexity" ? ApiUrl.perplexity : ApiUrl.openai
-			cloudProvider === "perplexity" ? ApiUrl.perplexity : customAPIHost === "" ? ApiUrl.openai : customAPIHost
+			cloudProvider === "perplexity" ? ApiUrl.perplexity : customOpenAiAPIHost === "" ? ApiUrl.openai : customOpenAiAPIHost
 
 		this.language = language
 

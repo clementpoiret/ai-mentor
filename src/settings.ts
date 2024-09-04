@@ -12,6 +12,7 @@ import ObsidianMentor from "./main"
 import { Mentor } from "./types"
 import { supportedLanguages } from "./languages"
 import { capitalize } from "./utils"
+import { Notice } from 'obsidian';
 
 export default class SettingTab extends PluginSettingTab {
 	plugin: ObsidianMentor
@@ -130,7 +131,7 @@ export default class SettingTab extends PluginSettingTab {
 
 				dropdown.setValue(
 					this.plugin.settings.perplexityModel ||
-						"llama-3.1-sonar-large-128k-online",
+					"llama-3.1-sonar-large-128k-online",
 				)
 				dropdown.onChange((value) => {
 					this.plugin.settings.perplexityModel = value as ModelType
@@ -158,17 +159,24 @@ export default class SettingTab extends PluginSettingTab {
 				})
 			})
 
-			new Setting(containerEl)
-				.setName("Custom API Host")
-				.setDesc("Customizing the OpenAI API host. Restart to take effect")
-				.addText((text: TextComponent) => {
-					text.setPlaceholder("eg. https://api.openai.com/v1/chat/completions")
-						.setValue(this.plugin.settings.openAiCustomHost || "")
-						.onChange((change) => {
-							this.plugin.settings.openAiCustomHost = change
-							this.plugin.saveSettings()
-						})
-				})
+		new Setting(containerEl)
+			.setName("Custom OpenAI API Host")
+			.setDesc("Customizing the OpenAI API host. Restart to take effect")
+			.addText((text: TextComponent) => {
+				text.setPlaceholder("eg. https://api.openai.com/v1/chat/completions")
+					.setValue(this.plugin.settings.customOpenAiAPIHost || "")
+					.onChange((change) => {
+						const regex = /https?:\/\/[a-zA-Z0-9.-]+\/v1\/chat\/completions/;
+						if (!regex.test(change)) {
+							new Notice("Custom OpenAI API Host Input Error")
+							return
+						}
+
+						new Notice("Custom OpenAI API Host Input Success")
+						this.plugin.settings.customOpenAiAPIHost = change
+						this.plugin.saveSettings()
+					})
+			})
 
 		new Setting(containerEl)
 			.setName("Preferred Model")
