@@ -35,6 +35,7 @@ export class ChatView extends ItemView {
 		preferredMentorId: string,
 		model: string,
 		language: keyof typeof supportedLanguages,
+		customOpenAiAPIHost: string
 	) {
 		super(leaf)
 		this.preferredMentorId = preferredMentorId
@@ -50,6 +51,7 @@ export class ChatView extends ItemView {
 			this.model,
 			token,
 			this.language,
+			customOpenAiAPIHost
 		)
 	}
 

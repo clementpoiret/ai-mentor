@@ -28,7 +28,7 @@ export enum ModelType {
 
 enum ApiUrl {
 	perplexity = `https://api.perplexity.ai/chat/completions`,
-	openai = `https://api.openai.com/v1/chat/completions`,
+	 openai = `https://api.openai.com/v1/chat/completions`,
 }
 
 export interface GPTSettings {
@@ -74,13 +74,14 @@ export class MentorModel {
 		model: ModelType,
 		apiKey: string,
 		language: keyof typeof supportedLanguages,
+		customOpenAiAPIHost : string,
 		suffix?: string,
 	) {
 		this.id = id
 		this.mentor = mentor
 
 		this.apiUrl =
-			cloudProvider === "perplexity" ? ApiUrl.perplexity : ApiUrl.openai
+			cloudProvider === "perplexity" ? ApiUrl.perplexity : customOpenAiAPIHost === "" ? ApiUrl.openai : customOpenAiAPIHost
 
 		this.language = language
 
