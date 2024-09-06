@@ -6,9 +6,8 @@ import { MentorModel, ModelType } from "./ai/model"
 import { MentorIcon } from "./assets/icons/mentor"
 import { ChatView, VIEW_TYPE_CHAT } from "./components/chatview"
 import { MentorModal } from "./components/modals"
-import SettingTab from "./settings"
 import { supportedLanguages } from "./languages"
-
+import SettingTab from "./settings"
 
 interface MentorSettings {
 	preferredMentorId: string
@@ -52,8 +51,8 @@ export default class ObsidianMentor extends Plugin {
 						? (this.settings.perplexityModel as ModelType)
 						: (this.settings.openAiModel as ModelType),
 					this.settings.language,
-					this.settings.customOpenAiAPIHost
-				)
+					this.settings.customOpenAiAPIHost,
+				),
 		)
 
 		// This creates an icon in the left ribbon.
@@ -65,7 +64,7 @@ export default class ObsidianMentor extends Plugin {
 			(evt: MouseEvent) => {
 				// Called when the user clicks the icon.
 				this.activateView()
-			}
+			},
 		)
 		// Perform additional things with the ribbon
 		ribbonIconEl.addClass("mentor-ribbon")
@@ -94,7 +93,7 @@ export default class ObsidianMentor extends Plugin {
 				? (this.settings.perplexityToken as ModelType)
 				: (this.settings.openAiToken as ModelType),
 			this.settings.language,
-			this.settings.customOpenAiAPIHost
+			this.settings.customOpenAiAPIHost,
 		)
 		// This adds the "ELI5" command.
 		this.addCommand({
@@ -106,7 +105,7 @@ export default class ObsidianMentor extends Plugin {
 				const loadingModal = new MentorModal(
 					this.app,
 					title,
-					"Interesting, let me think..."
+					"Interesting, let me think...",
 				)
 
 				if (selection) {
@@ -122,7 +121,7 @@ export default class ObsidianMentor extends Plugin {
 								new MentorModal(
 									this.app,
 									title,
-									response[0] // Only one possible response
+									response[0], // Only one possible response
 								).open()
 							} else {
 								// Show an error
@@ -148,7 +147,7 @@ export default class ObsidianMentor extends Plugin {
 						const loadingModal = new MentorModal(
 							this.app,
 							title,
-							"Interesting, let me think..."
+							"Interesting, let me think...",
 						)
 
 						if (selection) {
@@ -164,12 +163,12 @@ export default class ObsidianMentor extends Plugin {
 										new MentorModal(
 											this.app,
 											title,
-											response[0] // Only one possible response
+											response[0], // Only one possible response
 										).open()
 									} else {
 										// Show an error
 										new Notice(
-											"Error: Could not get explanation."
+											"Error: Could not get explanation.",
 										)
 									}
 								})
@@ -178,7 +177,7 @@ export default class ObsidianMentor extends Plugin {
 						}
 					})
 				})
-			})
+			}),
 		)
 
 		// This adds the "redact" command.
@@ -191,7 +190,7 @@ export default class ObsidianMentor extends Plugin {
 				const loadingModal = new MentorModal(
 					this.app,
 					title,
-					"Let me read and redact your note..."
+					"Let me read and redact your note...",
 				)
 
 				if (selection) {
@@ -235,7 +234,7 @@ export default class ObsidianMentor extends Plugin {
 						const loadingModal = new MentorModal(
 							this.app,
 							title,
-							"Let me read and redact your note..."
+							"Let me read and redact your note...",
 						)
 
 						if (selection) {
@@ -258,7 +257,7 @@ export default class ObsidianMentor extends Plugin {
 									} else {
 										// Show an error
 										new Notice(
-											"Error: Could not redact your note."
+											"Error: Could not redact your note.",
 										)
 									}
 								})
@@ -267,7 +266,7 @@ export default class ObsidianMentor extends Plugin {
 						}
 					})
 				})
-			})
+			}),
 		)
 
 		// This adds the "enhance" command.
@@ -280,7 +279,7 @@ export default class ObsidianMentor extends Plugin {
 				const loadingModal = new MentorModal(
 					this.app,
 					title,
-					"I am enhancing what you wrote..."
+					"I am enhancing what you wrote...",
 				)
 
 				if (selection) {
@@ -300,12 +299,12 @@ export default class ObsidianMentor extends Plugin {
 								new MentorModal(
 									this.app,
 									title,
-									explanations
+									explanations,
 								).open()
 							} else {
 								// Show an error
 								new Notice(
-									"Error: Could not enhance your note."
+									"Error: Could not enhance your note.",
 								)
 							}
 						})
@@ -327,7 +326,7 @@ export default class ObsidianMentor extends Plugin {
 						const loadingModal = new MentorModal(
 							this.app,
 							title,
-							"I am enhancing what you wrote..."
+							"I am enhancing what you wrote...",
 						)
 
 						if (selection) {
@@ -348,12 +347,12 @@ export default class ObsidianMentor extends Plugin {
 										new MentorModal(
 											this.app,
 											title,
-											explanations
+											explanations,
 										).open()
 									} else {
 										// Show an error
 										new Notice(
-											"Error: Could not enhance your note."
+											"Error: Could not enhance your note.",
 										)
 									}
 								})
@@ -362,7 +361,7 @@ export default class ObsidianMentor extends Plugin {
 						}
 					})
 				})
-			})
+			}),
 		)
 	}
 
@@ -376,7 +375,7 @@ export default class ObsidianMentor extends Plugin {
 		})
 
 		this.app.workspace.revealLeaf(
-			this.app.workspace.getLeavesOfType(VIEW_TYPE_CHAT)[0]
+			this.app.workspace.getLeavesOfType(VIEW_TYPE_CHAT)[0],
 		)
 	}
 
@@ -388,7 +387,7 @@ export default class ObsidianMentor extends Plugin {
 		this.settings = Object.assign(
 			{},
 			DEFAULT_SETTINGS,
-			await this.loadData()
+			await this.loadData(),
 		)
 	}
 

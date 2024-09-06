@@ -4,15 +4,15 @@ import {
 	PluginSettingTab,
 	Setting,
 	TextComponent,
+	Notice,
 } from "obsidian"
 
 import { Topics, Individuals } from "./ai/mentors"
 import { ModelType } from "./ai/model"
+import { supportedLanguages } from "./languages"
 import ObsidianMentor from "./main"
 import { Mentor } from "./types"
-import { supportedLanguages } from "./languages"
 import { capitalize } from "./utils"
-import { Notice } from 'obsidian';
 
 export default class SettingTab extends PluginSettingTab {
 	plugin: ObsidianMentor
@@ -131,7 +131,7 @@ export default class SettingTab extends PluginSettingTab {
 
 				dropdown.setValue(
 					this.plugin.settings.perplexityModel ||
-					"llama-3.1-sonar-large-128k-online",
+						"llama-3.1-sonar-large-128k-online",
 				)
 				dropdown.onChange((value) => {
 					this.plugin.settings.perplexityModel = value as ModelType
@@ -163,10 +163,13 @@ export default class SettingTab extends PluginSettingTab {
 			.setName("Custom OpenAI API Host")
 			.setDesc("Customizing the OpenAI API host. Restart to take effect")
 			.addText((text: TextComponent) => {
-				text.setPlaceholder("eg. https://api.openai.com/v1/chat/completions")
+				text.setPlaceholder(
+					"eg. https://api.openai.com/v1/chat/completions",
+				)
 					.setValue(this.plugin.settings.customOpenAiAPIHost || "")
 					.onChange((change) => {
-						const regex = /https?:\/\/[a-zA-Z0-9.-]+\/v1\/chat\/completions/;
+						const regex =
+							/https?:\/\/[a-zA-Z0-9.-]+\/v1\/chat\/completions/
 						if (!regex.test(change)) {
 							new Notice("Custom OpenAI API Host Input Error")
 							return

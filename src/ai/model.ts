@@ -1,13 +1,13 @@
 // Inspired by `https://github.com/jmilldotdev/obsidian-gpt/blob/main/src/models/chatGPT.ts`
 
 import { RequestUrlParam, request } from "obsidian"
-import { pythonifyKeys } from "src/utils"
+
+import { pythonifyKeys, complete } from "src/utils"
 
 import { Command } from "./commands"
 import { Individuals, Topics } from "./mentors"
-import { Mentor, Message } from "../types"
 import { supportedLanguages } from "../languages"
-import { complete } from "../utils"
+import { Mentor, Message } from "../types"
 
 export enum ModelType {
 	// Perplexity models
@@ -28,7 +28,7 @@ export enum ModelType {
 
 enum ApiUrl {
 	perplexity = `https://api.perplexity.ai/chat/completions`,
-	 openai = `https://api.openai.com/v1/chat/completions`,
+	openai = `https://api.openai.com/v1/chat/completions`,
 }
 
 export interface GPTSettings {
@@ -74,14 +74,18 @@ export class MentorModel {
 		model: ModelType,
 		apiKey: string,
 		language: keyof typeof supportedLanguages,
-		customOpenAiAPIHost : string,
+		customOpenAiAPIHost: string,
 		suffix?: string,
 	) {
 		this.id = id
 		this.mentor = mentor
 
 		this.apiUrl =
-			cloudProvider === "perplexity" ? ApiUrl.perplexity : customOpenAiAPIHost === "" ? ApiUrl.openai : customOpenAiAPIHost
+			cloudProvider === "perplexity"
+				? ApiUrl.perplexity
+				: customOpenAiAPIHost === ""
+					? ApiUrl.openai
+					: customOpenAiAPIHost
 
 		this.language = language
 

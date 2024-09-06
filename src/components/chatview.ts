@@ -5,10 +5,11 @@ import { MentorModel, ModelType } from "../ai/model"
 import { CleanIcon } from "../assets/icons/clean"
 import { CopyIcon } from "../assets/icons/copy"
 import { SendIcon } from "../assets/icons/send"
-import { Mentor, Message } from "../types"
 import { supportedLanguages } from "../languages"
+import { Mentor, Message } from "../types"
 
-const introducer = "[ai-mentor] Feel free to send your first message to your mentor. FYI: `online` models are really good at question-answering and follow-up, but can hallucinate for small-talks, where `chat` models are better."
+const introducer =
+	"[ai-mentor] Feel free to send your first message to your mentor. FYI: `online` models are really good at question-answering and follow-up, but can hallucinate for small-talks, where `chat` models are better."
 
 export const VIEW_TYPE_CHAT = "mentor-chat-view"
 
@@ -35,7 +36,7 @@ export class ChatView extends ItemView {
 		preferredMentorId: string,
 		model: string,
 		language: keyof typeof supportedLanguages,
-		customOpenAiAPIHost: string
+		customOpenAiAPIHost: string,
 	) {
 		super(leaf)
 		this.preferredMentorId = preferredMentorId
@@ -51,7 +52,7 @@ export class ChatView extends ItemView {
 			this.model,
 			token,
 			this.language,
-			customOpenAiAPIHost
+			customOpenAiAPIHost,
 		)
 	}
 
@@ -132,7 +133,7 @@ export class ChatView extends ItemView {
 
 		const history =
 			this.mentor.history.filter(
-				(message: Message) => message.role !== "system"
+				(message: Message) => message.role !== "system",
 			) || []
 
 		for (const message of this.displayedMessages) {
@@ -283,7 +284,7 @@ export class ChatView extends ItemView {
 
 		// Refresh the view.
 		await this.onOpen()
-	
+
 		this.mentor
 			.getCompletion(prompt)
 			.then(async (response) => {
@@ -326,7 +327,7 @@ export class ChatView extends ItemView {
 		this.displayedMessages = [
 			{
 				role: "assistant",
-				content: introducer
+				content: introducer,
 			},
 		]
 
